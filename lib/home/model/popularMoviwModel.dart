@@ -1,12 +1,17 @@
-class Popular {
+class PopularMovieModel {
   int? page;
   List<Results>? results;
   int? totalPages;
   int? totalResults;
+  String? error;
 
-  Popular({this.page, this.results, this.totalPages, this.totalResults});
+  PopularMovieModel({this.page, this.results, this.totalPages, this.totalResults});
 
-  Popular.fromJson(Map<String, dynamic> json) {
+  PopularMovieModel.withError(String errorMessage) {
+    error = errorMessage;
+  }
+
+  PopularMovieModel.fromJson(Map<String, dynamic> json) {
     page = json['page'];
     if (json['results'] != null) {
       results = [];
