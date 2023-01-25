@@ -1,18 +1,18 @@
-class Movie {
+class NowPlaying {
   Dates? dates;
   int? page;
   List<Results>? results;
   int? totalPages;
   int? totalResults;
 
-  Movie(
+  NowPlaying(
       {this.dates,
         this.page,
         this.results,
         this.totalPages,
         this.totalResults});
 
-  Movie.fromJson(Map<String, dynamic> json) {
+  NowPlaying.fromJson(Map<String, dynamic> json) {
     dates = json['dates'] != null ? new Dates.fromJson(json['dates']) : null;
     page = json['page'];
     if (json['results'] != null) {
