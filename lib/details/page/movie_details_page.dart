@@ -3,10 +3,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movietest/details/bloc/movie_details_state.dart';
 import 'package:movietest/details/model/movie_details_model.dart';
+import 'package:movietest/details/resource/database/save_data_model.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 
 import '../bloc/movie_details_Bloc.dart';
 import '../bloc/movie_details_event.dart';
+import '../resource/database/database.dart';
+import '../use_case/save_data.dart';
 
 class MovieDetails extends StatefulWidget {
   int? movieId;
@@ -18,11 +21,12 @@ class MovieDetails extends StatefulWidget {
 
 class _MovieState extends State<MovieDetails> {
   late MovieDetailsBloc _movieDetailsBloc;
-
+  late DataBaseHelper dataBaseHelper = DataBaseHelper();
   @override
   void initState() {
     _movieDetailsBloc = MovieDetailsBloc(widget.movieId);
     _movieDetailsBloc.add(GetMovieDetails());
+    dataBaseHelper.init();
     super.initState();
   }
 
@@ -103,7 +107,17 @@ class _MovieState extends State<MovieDetails> {
                                 fontSize: 18,
                                 color: Colors.black),
                           ),
-                          const Icon(Icons.bookmark)
+                          GestureDetector(
+                              onTap: (){
+                                SaveDataModel saveDataModel = SaveDataModel(
+                                    movieId: model.id,
+                                    name: model.originalTitle.toString(),
+                                    rating: model.voteAverage.toString(),
+                                    type: model.genres![0].name.toString(),
+                                    duration: durationToString(model.runtime));
+                                SaveData.onTap(context, saveDataModel, dataBaseHelper);
+                              },
+                              child: const Icon(Icons.bookmark))
                         ],
                       ),
                     ),
