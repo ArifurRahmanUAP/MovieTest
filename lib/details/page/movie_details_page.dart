@@ -52,9 +52,7 @@ class _MovieState extends State<MovieDetails> {
               return _buildLoading();
             } else if (state is MovieDetailsLoaded) {
               return SizedBox(
-                child: SizedBox(
-                  child: _buildCard(context, state.movieDetailsModel),
-                ),
+                child: _buildCard(context, state.movieDetailsModel),
               );
             } else if (state is HomeError) {
               return Container();
@@ -68,36 +66,44 @@ class _MovieState extends State<MovieDetails> {
   }
 
   Widget _buildCard(BuildContext context, MovieDetailsModel model) {
-    return Container(
-      color: Colors.transparent,
-      child: Column(
-        children: [
-          Image(
-            image: NetworkImage(
-                "https://image.tmdb.org/t/p/w500${model.posterPath}"),
-            fit: BoxFit.cover,
-            height: 300,
-            width: double.infinity,
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              decoration:  const BoxDecoration(
-                  borderRadius:  BorderRadius.only(
-                      topLeft:    Radius.circular(40.0),
-                      topRight:   Radius.circular(40.0))
-              ),
+    return Expanded(
+      child: Container(
+        color: Colors.transparent,
+        child: Column(
+          children: [
+            Image(
+              image: NetworkImage(
+                  "https://image.tmdb.org/t/p/w500${model.posterPath}"),
+              fit: BoxFit.cover,
+              height: 300,
               width: double.infinity,
+            ),
+            Align(
+              alignment: Alignment.topLeft,
               child: Container(
-                margin: EdgeInsets.only(top: 15),
+                margin: const EdgeInsets.only(top: 15),
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40.0),
+                        topRight: Radius.circular(40.0))),
+                width: double.infinity,
                 child: Column(
                   children: [
-                    Text(
-                      model.originalTitle.toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.black),
+                    Container(
+                      margin: EdgeInsets.only(left: 15, right: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            model.originalTitle.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.black),
+                          ),
+                          const Icon(Icons.bookmark)
+                        ],
+                      ),
                     ),
                     Row(
                       children: [
@@ -204,7 +210,8 @@ class _MovieState extends State<MovieDetails> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "Description",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(
@@ -216,8 +223,8 @@ class _MovieState extends State<MovieDetails> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
