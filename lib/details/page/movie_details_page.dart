@@ -68,37 +68,165 @@ class _MovieState extends State<MovieDetails> {
   }
 
   Widget _buildCard(BuildContext context, MovieDetailsModel model) {
-    return SafeArea(
-        child: Stack(
-      children: [
-        Image(
-          image: NetworkImage(
-              "https://image.tmdb.org/t/p/w500${model.posterPath}"),
-          fit: BoxFit.cover,
-          height: 300,
-          width: double.infinity,
-        ),
-        Container(
-          alignment: Alignment.topLeft,
-          width: double.infinity,
-          margin: const EdgeInsets.only(top: 310),
-          child: Expanded(
-              child: Column(
-            children: [
-              Text(
-                model.originalTitle.toString(),
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black),
+    return Container(
+      color: Colors.transparent,
+      child: Column(
+        children: [
+          Image(
+            image: NetworkImage(
+                "https://image.tmdb.org/t/p/w500${model.posterPath}"),
+            fit: BoxFit.cover,
+            height: 300,
+            width: double.infinity,
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              decoration:  const BoxDecoration(
+                  borderRadius:  BorderRadius.only(
+                      topLeft:    Radius.circular(40.0),
+                      topRight:   Radius.circular(40.0))
               ),
-              Text("${model.voteAverage}/10")
-            ],
-          )),
-        ),
-      ],
-    ));
+              width: double.infinity,
+              child: Container(
+                margin: EdgeInsets.only(top: 15),
+                child: Column(
+                  children: [
+                    Text(
+                      model.originalTitle.toString(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                        ),
+                        Text("${model.voteAverage}/10")
+                      ],
+                    ),
+                    SizedBox(
+                      height: 40,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.all(8),
+                          itemCount: model.genres!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                                child: Row(
+                              children: [
+                                Center(
+                                    child: OutlinedButton(
+                                  onPressed: () {},
+                                  child: Text("${model.genres![index].name}"),
+                                )),
+                                const SizedBox(
+                                  width: 8,
+                                )
+                              ],
+                            ));
+                          }),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 30, right: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: const [
+                              Text(
+                                "Length",
+                                style: TextStyle(color: Colors.black38),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: const [
+                              Text(
+                                "Language",
+                                style: TextStyle(color: Colors.black38),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: const [
+                              Text(
+                                "Rating",
+                                style: TextStyle(color: Colors.black38),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 30, right: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                durationToString(model.runtime),
+                                style: const TextStyle(color: Colors.black),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                model.spokenLanguages![0].englishName!,
+                                style: const TextStyle(color: Colors.black),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                model.adult! ? "R" : "PG-13",
+                                style: const TextStyle(color: Colors.black),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 13,
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Description",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    Text(model.overview.toString(),
+                        style: const TextStyle(color: Colors.black38)),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildLoading() => const Center(child: CircularProgressIndicator());
+
+  String durationToString(int? minutes) {
+    var d = Duration(minutes: minutes!);
+    List<String> parts = d.toString().split(':');
+    return '${parts[0].padLeft(2, '0')}h ${parts[1].padLeft(2, '0')}min';
+  }
 }
