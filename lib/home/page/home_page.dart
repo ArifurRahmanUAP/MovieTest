@@ -113,7 +113,7 @@ class _HomeState extends State<HomePage> {
         return GestureDetector(
           onTap: (){
             // MovieClick.onTap(model.results![index].id);
-            MovieClick.onTap(model, index);
+            MovieClick.onTap(context, model.results![index].id);
           },
           child: Container(
             width: 150,
