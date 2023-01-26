@@ -6,14 +6,14 @@ import 'movie_details_event.dart';
 import 'movie_details_state.dart';
 
 class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
-  MovieDetailsBloc() : super(MovieDetailsInitial()) {
-    final MovieDetailsApiRepository _movieDetailsApiRepository =
-        MovieDetailsApiRepository();
+  int? movieId;
+  MovieDetailsBloc(this.movieId) : super(MovieDetailsInitial()) {
+    final MovieDetailsApiRepository movieDetailsApiRepository = MovieDetailsApiRepository();
 
     on<GetMovieDetails>((event, emit) async {
       try {
         emit(MovieDetailsLoading());
-        final mList = await _movieDetailsApiRepository.fetchMovieDetails();
+        final mList = await movieDetailsApiRepository.fetchMovieDetails(movieId);
         emit(MovieDetailsLoaded(mList));
         if (mList.error != null) {
           emit(MovieDetailsError(mList.error));

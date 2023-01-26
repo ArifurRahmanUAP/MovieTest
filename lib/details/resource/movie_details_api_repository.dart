@@ -4,9 +4,10 @@ import 'movie_details_api_provider.dart';
 
 class MovieDetailsApiRepository {
   final _provider = MovieDetailsApiProvider();
+  int? movieId;
 
-  Future<MovieDetailsModel> fetchMovieDetails() {
-    return _provider.fetchMovieDetails();
+  Future<MovieDetailsModel> fetchMovieDetails(movieId) {
+    return _provider.fetchMovieDetails(movieId);
   }
 }
 

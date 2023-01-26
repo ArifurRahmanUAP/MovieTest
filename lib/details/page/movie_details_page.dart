@@ -9,17 +9,19 @@ import '../bloc/movie_details_Bloc.dart';
 import '../bloc/movie_details_event.dart';
 
 class MovieDetails extends StatefulWidget {
-  const MovieDetails({super.key});
+  int? movieId;
+  MovieDetails(this.movieId, {super.key});
 
   @override
   State<StatefulWidget> createState() => _MovieState();
 }
 
 class _MovieState extends State<MovieDetails> {
-  final MovieDetailsBloc _movieDetailsBloc = MovieDetailsBloc();
+  late MovieDetailsBloc _movieDetailsBloc;
 
   @override
   void initState() {
+    _movieDetailsBloc = MovieDetailsBloc(widget.movieId);
     _movieDetailsBloc.add(GetMovieDetails());
     super.initState();
   }
