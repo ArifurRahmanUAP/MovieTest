@@ -1,9 +1,9 @@
 import 'package:movietest/home/model/nowPlayingModel.dart';
 import 'package:movietest/home/model/popularMoviwModel.dart';
 
-import 'api_provider.dart';
+import 'home_api_provider.dart';
 
-class ApiRepository {
+class HomeApiRepository {
   final _provider = ApiProvider();
 
   Future<NowPlayingModel> fetchNowShowingMovieList() {

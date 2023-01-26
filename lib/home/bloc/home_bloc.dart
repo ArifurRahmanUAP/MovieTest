@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../resource/api_repository.dart';
+import '../resource/home_api_repository.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState>{
   HomeBloc(): super(HomeInitial()){
-    final ApiRepository _apiRepository = ApiRepository();
+    final HomeApiRepository _apiRepository = HomeApiRepository();
 
     on<GetNowShowingMovieList>((event, emit) async {
       try {

@@ -5,6 +5,8 @@ import 'package:movietest/home/bloc/home_event.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 import 'package:movietest/home/model/nowPlayingModel.dart';
 
+import '../use_case/movie_onClick.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -22,6 +24,7 @@ class _HomeState extends State<HomePage> {
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -54,14 +57,40 @@ class _HomeState extends State<HomePage> {
               } else if (state is NowPlayingLoaded) {
                 return Column(
                   children: [
-                    Container(
-                      height: 20,
-                      child: Text("Now Showing"),
-                    ),
-                    Container(
-                      height: 300,
+                    SizedBox(
+                        height: 25,
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Now Showing",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold))),
+                            Align(
+                                alignment: Alignment.centerRight,
+                                child: OutlinedButton(
+                                  onPressed: () {},
+                                  child: const Text(
+                                    'See More',
+                                    style: TextStyle(color: Colors.black26),
+                                  ),
+                                )),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 270,
                       child: _buildCard(context, state.nowPlayingModel),
-                    )
+                    ),
+                    const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "Popular",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ))
                   ],
                 );
               } else if (state is HomeError) {
@@ -81,36 +110,42 @@ class _HomeState extends State<HomePage> {
       scrollDirection: Axis.horizontal,
       itemCount: model.results!.length,
       itemBuilder: (context, index) {
-        return Container(
-          width: 300,
-          margin: const EdgeInsets.all(8.0),
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                  color: const Color.fromARGB(255, 196, 193, 193), width: 0.5)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                "Original Title: ${model.results![index].originalTitle}"
-                    .toUpperCase(),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                "OverView: ${model.results![index].overview}".toUpperCase(),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                "Title: ${model.results![index].title}".toUpperCase(),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                "Vote: ${model.results![index].voteCount}".toUpperCase(),
-              ),
-            ],
+        return GestureDetector(
+          onTap: (){
+            // MovieClick.onTap(model.results![index].id);
+            MovieClick.onTap(model, index);
+          },
+          child: Container(
+            width: 150,
+            margin: const EdgeInsets.all(2.0),
+            padding: const EdgeInsets.all(5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                    height: 160,
+                    child: Image.network("https://image.tmdb.org/t/p/w500${model.results![index].posterPath}"),),
+                const SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  model.results![index].originalTitle.toString(),
+                  softWrap: true,
+                  style:
+                      const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                    ),
+                    Text("${model.results![index].voteAverage} /10")
+                  ],
+                )
+              ],
+            ),
           ),
         );
       },
