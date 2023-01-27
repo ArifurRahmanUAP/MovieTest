@@ -6,6 +6,8 @@ import 'package:movietest/details/model/movie_details_model.dart';
 import 'package:movietest/details/resource/database/save_data_model.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 
+import '../../Util/colors.dart';
+import '../../Util/helper.dart';
 import '../bloc/movie_details_Bloc.dart';
 import '../bloc/movie_details_event.dart';
 import '../resource/database/database.dart';
@@ -59,8 +61,8 @@ class _MovieState extends State<MovieDetails> {
             } else if (state is MovieDetailsLoading) {
               return _buildLoading();
             } else if (state is MovieDetailsLoaded) {
-              return SizedBox(
-                child: _buildCard(context, state.movieDetailsModel),
+              return Scaffold(
+                body: _buildCard(context, state.movieDetailsModel),
               );
             } else if (state is HomeError) {
               return Container();
@@ -74,157 +76,263 @@ class _MovieState extends State<MovieDetails> {
   }
 
   Widget _buildCard(BuildContext context, MovieDetailsModel model) {
-    return Container(
-      color: Colors.transparent,
-      child: Column(
-        children: [
-          Image(
-            image: NetworkImage(
-                "https://image.tmdb.org/t/p/w500${model.posterPath}"),
-            fit: BoxFit.cover,
-            height: 300,
-            width: double.infinity,
-          ),
-          Container(
-            margin: const EdgeInsets.only(left: 10, right: 10),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                margin: const EdgeInsets.only(top: 15),
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40.0),
-                        topRight: Radius.circular(40.0))),
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          model.originalTitle.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.black),
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: Helper.getScreenHeight(context) * 0.5,
+                        width: Helper.getScreenWidth(context),
+                        child: Image.network(
+                          "https://image.tmdb.org/t/p/w500${model.posterPath}",
+                          fit: BoxFit.cover,
                         ),
-                        GestureDetector(
-                            onTap: () {
-                              SaveDataModel saveDataModel = SaveDataModel(
-                                  movieId: model.id,
-                                  name: model.originalTitle.toString(),
-                                  rating: model.voteAverage.toString(),
-                                  type: model.genres![0].name.toString(),
-                                  duration: durationToString(model.runtime));
-                              SaveData.onTap(
-                                  context, saveDataModel, dataBaseHelper);
-                            },
-                            child: const Icon(Icons.bookmark))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.star,
-                          color: Colors.yellow,
-                        ),
-                        Text("${model.voteAverage}/10")
-                      ],
-                    ),
-                    SizedBox(
-                      height: 40,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.all(5),
-                          itemCount: model.genres!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return SizedBox(
-                                child: Row(
-                              children: [
-                                Center(
-                                    child: OutlinedButton(
-                                  onPressed: () {},
-                                  child: Text("${model.genres![index].name}"),
-                                )),
-                                const SizedBox(
-                                  width: 8,
-                                )
-                              ],
-                            ));
-                          }),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Length",
-                              style: TextStyle(color: Colors.black38),
-                              textAlign: TextAlign.start,
-                            ),
-                            Text(
-                              durationToString(model.runtime),
-                              style: const TextStyle(
-                                color: Colors.black,
-                              ),
-                              textAlign: TextAlign.start,
-                            ),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Language",
-                              style: TextStyle(color: Colors.black38),
-                            ),
-                            Text(
-                              model.spokenLanguages![0].englishName.toString(),
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Rating",
-                              style: TextStyle(color: Colors.black38),
-                            ),
-                            Text(model.adult! ? "R" : "PG-13",
-                                style: const TextStyle(color: Colors.black)),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Description",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
+                      Container(
+                        height: Helper.getScreenHeight(context) * 0.5,
+                        width: Helper.getScreenWidth(context),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: [0.0, 0.0],
+                            colors: [
+                              Colors.black.withOpacity(0.9),
+                              Colors.black.withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SafeArea(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Icon(
+                                  Icons.arrow_back_ios_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: Helper.getScreenHeight(context) * 0.25,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 15.0),
+                                child: Container(
+                                  height: Helper.getScreenHeight(context)*.631,
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 30),
+                                  decoration: const ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                      ),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              model.originalTitle.toString(),
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18,
+                                                  color: Colors.black),
+                                            ),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  SaveDataModel saveDataModel = SaveDataModel(
+                                                      movieId: model.id,
+                                                      name: model.originalTitle.toString(),
+                                                      rating: model.voteAverage.toString(),
+                                                      type: model.genres![0].name.toString(),
+                                                      duration: durationToString(model.runtime));
+                                                  SaveData.onTap(
+                                                      context, saveDataModel, dataBaseHelper);
+                                                },
+                                                child: const Icon(Icons.bookmark))
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child:     Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.yellow,
+                                            ),
+                                            Text("${model.voteAverage}/10 IMDb",
+                                            style: const TextStyle(color: Colors.black38),)
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2),
+                                        child:   SizedBox(
+                                          height: 40,
+                                          child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              padding: const EdgeInsets.all(5),
+                                              itemCount: model.genres!.length,
+                                              itemBuilder: (BuildContext context, int index) {
+                                                return SizedBox(
+                                                    child: Row(
+                                                      children: [
+                                                        Center(
+                                                            child: OutlinedButton(
+                                                              onPressed: () {},
+                                                              child: Text("${model.genres![index].name}"),
+                                                            )),
+                                                        const SizedBox(
+                                                          width: 8,
+                                                        )
+                                                      ],
+                                                    ));
+                                              }),
+                                        ),),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  "Length",
+                                                  style: TextStyle(color: Colors.black38),
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                                Text(
+                                                  durationToString(model.runtime),
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  "Language",
+                                                  style: TextStyle(color: Colors.black38),
+                                                ),
+                                                Text(
+                                                  model.spokenLanguages![0].englishName.toString(),
+                                                  style: const TextStyle(color: Colors.black),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  "Rating",
+                                                  style: TextStyle(color: Colors.black38),
+                                                ),
+                                                Text(model.adult! ? "R" : "PG-13",
+                                                    style: const TextStyle(color: Colors.black)),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            "Description",
+                                            style: TextStyle(
+                                                fontSize: 18, fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child:  Text(model.overview.toString(),
+                                            style: const TextStyle(color: Colors.black38)),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                    Text(model.overview.toString(),
-                        style: const TextStyle(color: Colors.black38)),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

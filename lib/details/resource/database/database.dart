@@ -45,7 +45,7 @@ class DataBaseHelper {
 
 
 
-  Future<List<SaveDataModel>> getsaveDataProduct() async {
+  Future<List<SaveDataModel>> fetchBookmark() async {
 
     if (_db == null) {
       throw "bd is not initiated, initiate using [init(db)] function";

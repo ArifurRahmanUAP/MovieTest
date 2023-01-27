@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movietest/app_drawer/app_drawer.dart';
 import 'package:movietest/home/bloc/home_bloc.dart';
 import 'package:movietest/home/bloc/home_event.dart';
 import 'package:movietest/home/bloc/home_state.dart';
@@ -28,8 +29,31 @@ class _HomeState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Movie List')),
+      appBar: AppBar(
+        title: const Text(
+          'Movie List',
+          style: TextStyle(color: Colors.black),
+        ),
+        elevation: 0,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu_open_sharp),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+
+        actions: [
+          Padding(
+            padding: EdgeInsets.all(13),
+            child: Image.asset(
+              "assets/notification.png",
+            ),
+          ),
+        ],
+        centerTitle: true,
+      ),
       body: _buildListHome(),
+      drawer: AppDrawer(),
     );
   }
 
@@ -81,7 +105,7 @@ class _HomeState extends State<HomePage> {
                           ],
                         )),
                     SizedBox(
-                      height: 270,
+                      height: 300,
                       child: _buildCard(context, state.nowPlayingModel),
                     ),
                     const Align(
@@ -111,12 +135,12 @@ class _HomeState extends State<HomePage> {
       itemCount: model.results!.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: (){
+          onTap: () {
             // MovieClick.onTap(model.results![index].id);
             MovieClick.onTap(context, model.results![index].id);
           },
           child: Container(
-            width: 150,
+            width: 180,
             margin: const EdgeInsets.all(2.0),
             padding: const EdgeInsets.all(5),
             child: Column(
@@ -124,16 +148,24 @@ class _HomeState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                    height: 160,
-                    child: Image.network("https://image.tmdb.org/t/p/w500${model.results![index].posterPath}"),),
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.network(
+                      "https://image.tmdb.org/t/p/w500${model.results![index].posterPath}",
+                      fit: BoxFit.cover,
+                      width: 180,
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 2,
                 ),
                 Text(
                   model.results![index].originalTitle.toString(),
                   softWrap: true,
-                  style:
-                      const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 Row(
                   children: [
