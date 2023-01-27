@@ -6,27 +6,30 @@ String saveDataModelToJson(SaveDataModel data) => json.encode(data.toJson());
 
 class SaveDataModel {
   SaveDataModel({
-    required this.movieId,
-    required this.name,
-    required this.rating,
-    required this.type,
-    required this.duration,
+     this.movieId,
+     this.name,
+     this.rating,
+     this.genres,
+     this.duration,
+     this.image,
 
   });
 
   int? movieId;
-  String name;
-  String rating;
-  String type;
-  String duration;
+  String? name;
+  String? rating;
+  String? genres;
+  String? duration;
+  String? image;
 
 
   factory SaveDataModel.fromJson(Map<dynamic, dynamic> json) => SaveDataModel(
     movieId: json["movieId"],
     name: json["name"],
     rating: json["rating"],
-    type: json["type"],
+    genres: json["genres"],
     duration: json["duration"],
+    image: json["image"],
 
   );
 
@@ -34,7 +37,8 @@ class SaveDataModel {
     "movieId": movieId,
     "name": name,
     "rating": rating,
-    "type": type,
+    "genres": genres,
     "duration": duration,
+    "image": image
   };
 }

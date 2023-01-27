@@ -4,14 +4,15 @@ import '../resource/home_api_repository.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState>{
-  HomeBloc(): super(HomeInitial()){
+class HomeBloc extends Bloc<HomeEvent, HomeState> {
+  HomeBloc() : super(HomeInitial()) {
     final HomeApiRepository _apiRepository = HomeApiRepository();
 
     on<GetNowShowingMovieList>((event, emit) async {
       try {
         emit(HomeLoading());
         final mList = await _apiRepository.fetchNowShowingMovieList();
+
         emit(NowPlayingLoaded(mList));
         if (mList.error != null) {
           emit(HomeError(mList.error));
@@ -33,6 +34,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState>{
         emit(const HomeError("Failed to fetch data. is your device online?"));
       }
     });
-
   }
 }

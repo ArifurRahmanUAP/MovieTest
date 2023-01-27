@@ -58,8 +58,9 @@ class DataBaseHelper {
           movieId: maps[i]['movieId'],
           name:  maps[i]['name'],
           rating:  maps[i]['rating'],
-          type: maps[i]['type'],
+          genres: maps[i]['genres'],
           duration: maps[i]['duration'],
+          image: maps[i]['image'],
       );
     });
 

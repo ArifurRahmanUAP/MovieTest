@@ -41,7 +41,6 @@ class _HomeState extends State<HomePage> {
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
-
         actions: [
           Padding(
             padding: EdgeInsets.all(13),

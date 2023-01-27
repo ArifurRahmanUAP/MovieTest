@@ -25,6 +25,7 @@ class MovieDetails extends StatefulWidget {
 class _MovieState extends State<MovieDetails> {
   late MovieDetailsBloc _movieDetailsBloc;
   late DataBaseHelper dataBaseHelper = DataBaseHelper();
+  StringBuffer saveDatas = StringBuffer();
 
   @override
   void initState() {
@@ -114,8 +115,7 @@ class _MovieState extends State<MovieDetails> {
                     child: Column(
                       children: [
                         Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 20.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -128,7 +128,6 @@ class _MovieState extends State<MovieDetails> {
                                   color: Colors.white,
                                 ),
                               ),
-
                             ],
                           ),
                         ),
@@ -142,10 +141,11 @@ class _MovieState extends State<MovieDetails> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 15.0),
                                 child: Container(
-                                  height: Helper.getScreenHeight(context)*.631,
+                                  height:
+                                      Helper.getScreenHeight(context) * .631,
                                   width: double.infinity,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 30),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 30),
                                   decoration: const ShapeDecoration(
                                     color: Colors.white,
                                     shape: RoundedRectangleBorder(
@@ -157,13 +157,14 @@ class _MovieState extends State<MovieDetails> {
                                   ),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               model.originalTitle.toString(),
@@ -174,30 +175,52 @@ class _MovieState extends State<MovieDetails> {
                                             ),
                                             GestureDetector(
                                                 onTap: () {
-                                                  SaveDataModel saveDataModel = SaveDataModel(
-                                                      movieId: model.id,
-                                                      name: model.originalTitle.toString(),
-                                                      rating: model.voteAverage.toString(),
-                                                      type: model.genres![0].name.toString(),
-                                                      duration: durationToString(model.runtime));
-                                                  SaveData.onTap(
-                                                      context, saveDataModel, dataBaseHelper);
+                                                  for (var value
+                                                      in model.genres!) {
+                                                    saveDatas.write("${value.name},");
+                                                  }
+
+                                                  SaveDataModel saveDataModel =
+                                                      SaveDataModel(
+                                                          movieId: model.id,
+                                                          name: model
+                                                              .originalTitle
+                                                              .toString(),
+                                                          rating: model
+                                                              .voteAverage
+                                                              .toString(),
+                                                          genres: saveDatas.toString().substring(0, saveDatas.length - 1),
+                                                          duration:
+                                                              durationToString(
+                                                                  model
+                                                                      .runtime),
+                                                          image: model
+                                                              .posterPath
+                                                              .toString());
+                                                  SaveData.onPress(
+                                                      context,
+                                                      saveDataModel,
+                                                      dataBaseHelper);
                                                 },
-                                                child: const Icon(Icons.bookmark))
+                                                child:
+                                                    const Icon(Icons.bookmark))
                                           ],
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20),
-                                        child:     Row(
+                                        child: Row(
                                           children: [
                                             const Icon(
                                               Icons.star,
                                               color: Colors.yellow,
                                             ),
-                                            Text("${model.voteAverage}/10 IMDb",
-                                            style: const TextStyle(color: Colors.black38),)
+                                            Text(
+                                              "${model.voteAverage}/10 IMDb",
+                                              style: const TextStyle(
+                                                  color: Colors.black38),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -207,28 +230,32 @@ class _MovieState extends State<MovieDetails> {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 2),
-                                        child:   SizedBox(
+                                        child: SizedBox(
                                           height: 40,
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
                                               padding: const EdgeInsets.all(5),
                                               itemCount: model.genres!.length,
-                                              itemBuilder: (BuildContext context, int index) {
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
                                                 return SizedBox(
                                                     child: Row(
-                                                      children: [
-                                                        Center(
-                                                            child: OutlinedButton(
-                                                              onPressed: () {},
-                                                              child: Text("${model.genres![index].name}"),
-                                                            )),
-                                                        const SizedBox(
-                                                          width: 8,
-                                                        )
-                                                      ],
-                                                    ));
+                                                  children: [
+                                                    Center(
+                                                        child: OutlinedButton(
+                                                      onPressed: () {},
+                                                      child: Text(
+                                                          "${model.genres![index].name}"),
+                                                    )),
+                                                    const SizedBox(
+                                                      width: 8,
+                                                    )
+                                                  ],
+                                                ));
                                               }),
-                                        ),),
+                                        ),
+                                      ),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -236,19 +263,24 @@ class _MovieState extends State<MovieDetails> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: [
                                             Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 const Text(
                                                   "Length",
-                                                  style: TextStyle(color: Colors.black38),
+                                                  style: TextStyle(
+                                                      color: Colors.black38),
                                                   textAlign: TextAlign.start,
                                                 ),
                                                 Text(
-                                                  durationToString(model.runtime),
+                                                  durationToString(
+                                                      model.runtime),
                                                   style: const TextStyle(
                                                     color: Colors.black,
                                                   ),
@@ -257,29 +289,42 @@ class _MovieState extends State<MovieDetails> {
                                               ],
                                             ),
                                             Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 const Text(
                                                   "Language",
-                                                  style: TextStyle(color: Colors.black38),
+                                                  style: TextStyle(
+                                                      color: Colors.black38),
                                                 ),
                                                 Text(
-                                                  model.spokenLanguages![0].englishName.toString(),
-                                                  style: const TextStyle(color: Colors.black),
+                                                  model.spokenLanguages![0]
+                                                      .englishName
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                      color: Colors.black),
                                                 ),
                                               ],
                                             ),
                                             Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 const Text(
                                                   "Rating",
-                                                  style: TextStyle(color: Colors.black38),
+                                                  style: TextStyle(
+                                                      color: Colors.black38),
                                                 ),
-                                                Text(model.adult! ? "R" : "PG-13",
-                                                    style: const TextStyle(color: Colors.black)),
+                                                Text(
+                                                    model.adult!
+                                                        ? "R"
+                                                        : "PG-13",
+                                                    style: const TextStyle(
+                                                        color: Colors.black)),
                                               ],
                                             ),
                                           ],
@@ -296,7 +341,8 @@ class _MovieState extends State<MovieDetails> {
                                           child: Text(
                                             "Description",
                                             style: TextStyle(
-                                                fontSize: 18, fontWeight: FontWeight.bold),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                       ),
@@ -306,8 +352,9 @@ class _MovieState extends State<MovieDetails> {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20),
-                                        child:  Text(model.overview.toString(),
-                                            style: const TextStyle(color: Colors.black38)),
+                                        child: Text(model.overview.toString(),
+                                            style: const TextStyle(
+                                                color: Colors.black38)),
                                       ),
                                       const SizedBox(
                                         height: 15,
@@ -316,8 +363,7 @@ class _MovieState extends State<MovieDetails> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                              )
+                              const SizedBox()
                             ],
                           ),
                         ),
