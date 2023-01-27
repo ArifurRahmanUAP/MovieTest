@@ -13,6 +13,7 @@ import '../use_case/save_data.dart';
 
 class MovieDetails extends StatefulWidget {
   int? movieId;
+
   MovieDetails(this.movieId, {super.key});
 
   @override
@@ -22,6 +23,7 @@ class MovieDetails extends StatefulWidget {
 class _MovieState extends State<MovieDetails> {
   late MovieDetailsBloc _movieDetailsBloc;
   late DataBaseHelper dataBaseHelper = DataBaseHelper();
+
   @override
   void initState() {
     _movieDetailsBloc = MovieDetailsBloc(widget.movieId);
@@ -72,19 +74,20 @@ class _MovieState extends State<MovieDetails> {
   }
 
   Widget _buildCard(BuildContext context, MovieDetailsModel model) {
-    return Expanded(
-      child: Container(
-        color: Colors.transparent,
-        child: Column(
-          children: [
-            Image(
-              image: NetworkImage(
-                  "https://image.tmdb.org/t/p/w500${model.posterPath}"),
-              fit: BoxFit.cover,
-              height: 300,
-              width: double.infinity,
-            ),
-            Align(
+    return Container(
+      color: Colors.transparent,
+      child: Column(
+        children: [
+          Image(
+            image: NetworkImage(
+                "https://image.tmdb.org/t/p/w500${model.posterPath}"),
+            fit: BoxFit.cover,
+            height: 300,
+            width: double.infinity,
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            child: Align(
               alignment: Alignment.topLeft,
               child: Container(
                 margin: const EdgeInsets.only(top: 15),
@@ -95,31 +98,29 @@ class _MovieState extends State<MovieDetails> {
                 width: double.infinity,
                 child: Column(
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 15, right: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            model.originalTitle.toString(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.black),
-                          ),
-                          GestureDetector(
-                              onTap: (){
-                                SaveDataModel saveDataModel = SaveDataModel(
-                                    movieId: model.id,
-                                    name: model.originalTitle.toString(),
-                                    rating: model.voteAverage.toString(),
-                                    type: model.genres![0].name.toString(),
-                                    duration: durationToString(model.runtime));
-                                SaveData.onTap(context, saveDataModel, dataBaseHelper);
-                              },
-                              child: const Icon(Icons.bookmark))
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          model.originalTitle.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.black),
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              SaveDataModel saveDataModel = SaveDataModel(
+                                  movieId: model.id,
+                                  name: model.originalTitle.toString(),
+                                  rating: model.voteAverage.toString(),
+                                  type: model.genres![0].name.toString(),
+                                  duration: durationToString(model.runtime));
+                              SaveData.onTap(
+                                  context, saveDataModel, dataBaseHelper);
+                            },
+                            child: const Icon(Icons.bookmark))
+                      ],
                     ),
                     Row(
                       children: [
@@ -134,7 +135,7 @@ class _MovieState extends State<MovieDetails> {
                       height: 40,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(5),
                           itemCount: model.genres!.length,
                           itemBuilder: (BuildContext context, int index) {
                             return SizedBox(
@@ -152,72 +153,54 @@ class _MovieState extends State<MovieDetails> {
                             ));
                           }),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 30, right: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: const [
-                              Text(
-                                "Length",
-                                style: TextStyle(color: Colors.black38),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: const [
-                              Text(
-                                "Language",
-                                style: TextStyle(color: Colors.black38),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: const [
-                              Text(
-                                "Rating",
-                                style: TextStyle(color: Colors.black38),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 30, right: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                durationToString(model.runtime),
-                                style: const TextStyle(color: Colors.black),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                model.spokenLanguages![0].englishName!,
-                                style: const TextStyle(color: Colors.black),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                model.adult! ? "R" : "PG-13",
-                                style: const TextStyle(color: Colors.black),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Length",
+                              style: TextStyle(color: Colors.black38),
+                              textAlign: TextAlign.start,
+                            ),
+                            Text(
+                              durationToString(model.runtime),
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Language",
+                              style: TextStyle(color: Colors.black38),
+                            ),
+                            Text(
+                              model.spokenLanguages![0].englishName.toString(),
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Rating",
+                              style: TextStyle(color: Colors.black38),
+                            ),
+                            Text(model.adult! ? "R" : "PG-13",
+                                style: const TextStyle(color: Colors.black)),
+                          ],
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 13,
@@ -239,8 +222,8 @@ class _MovieState extends State<MovieDetails> {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
