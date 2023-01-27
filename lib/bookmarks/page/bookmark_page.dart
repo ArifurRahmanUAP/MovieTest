@@ -29,7 +29,6 @@ class BookmarkPageState extends State<BookmarkPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Bookmark')),
       body: _buildBookmark(),
     );
   }
@@ -76,5 +75,5 @@ class BookmarkPageState extends State<BookmarkPage> {
     );
   }
 
-  Widget _buildLoading() => const Center(child: CircularProgressIndicator());
+  Widget _buildLoading() => const Center(child: CircularProgressIndicator(color: Colors.red,));
 }
