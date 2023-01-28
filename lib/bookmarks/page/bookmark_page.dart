@@ -5,9 +5,12 @@ import 'package:movietest/Util/helper.dart';
 import 'package:movietest/bookmarks/bloc/movie_details_Bloc.dart';
 import 'package:movietest/bookmarks/bloc/movie_details_event.dart';
 import 'package:movietest/bookmarks/bloc/movie_details_state.dart';
-import 'package:movietest/details/resource/database/save_data_model.dart';
+import 'package:movietest/details/model/save_data_model.dart';
+import 'package:movietest/home/page/home_page.dart';
 
 import '../../details/resource/database/database.dart';
+import '../use_case/bookMark_onClick.dart';
+import '../use_case/bookmark_delete_click.dart';
 
 class BookmarkPage extends StatefulWidget {
   const BookmarkPage({super.key});
@@ -36,7 +39,7 @@ class BookmarkPageState extends State<BookmarkPage> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const HomePage()));
           },
           child: const Icon(
             Icons.arrow_back_ios_rounded,
@@ -95,107 +98,116 @@ class BookmarkPageState extends State<BookmarkPage> {
             itemCount: model.length,
             itemBuilder: (context, index) {
               split = model[index].genres?.split(",");
-
-              return Card(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(60))),
-                elevation: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        child: Image.network(
-                          "https://image.tmdb.org/t/p/w500${model[index].image}",
-                          height: 140,
-                          width: 100,
+              return GestureDetector(
+                onTap: (){
+                  BookmarkClick.onPress(context, model[index].movieId);
+                },
+                child: Card(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(60))),
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          child: Image.network(
+                            "https://image.tmdb.org/t/p/w500${model[index].image}",
+                            height: 140,
+                            width: 100,
+                          ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  model[index].name.toString(),
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                ),
-                                Text("${model[index].rating}/10 IMDb"),
-                                const Align(
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
+                        Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    model[index].name.toString(),
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
                                   ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
-                              height: 25,
-                              child: Expanded(
-                                child: ListView.builder(
-                                    physics: const ClampingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: split.length,
-                                    itemBuilder: (context, index) {
-                                      return Row(
-                                        children: [
-                                          OutlinedButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                split[index],
-                                                style: const TextStyle(
-                                                    color: Colors.black),
-                                              )),
-                                          const SizedBox(
-                                            width: 3,
-                                          )
-                                        ],
-                                      );
-                                    }),
+                                ],
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.timer_outlined,
-                                  color: Colors.black,
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                  ),
+                                  Text("${model[index].rating}/10 IMDb"),
+                                  GestureDetector(
+                                    onTap: (){
+                                      BookmarkDeleteClick.onPress(context, dataBaseHelper, model[index].movieId);
+                                    },
+                                    child: const Align(
+                                      alignment: AlignmentDirectional.centerEnd,
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                height: 25,
+                                child: Expanded(
+                                  child: ListView.builder(
+                                      physics: const ClampingScrollPhysics(),
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: split.length,
+                                      itemBuilder: (context, index) {
+                                        return Row(
+                                          children: [
+                                            OutlinedButton(
+                                                onPressed: () {},
+                                                child: Text(
+                                                  split[index],
+                                                  style: const TextStyle(
+                                                      color: Colors.black),
+                                                )),
+                                            const SizedBox(
+                                              width: 3,
+                                            )
+                                          ],
+                                        );
+                                      }),
                                 ),
-                                Text(model[index].duration.toString())
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.timer_outlined,
+                                    color: Colors.black,
+                                  ),
+                                  Text(model[index].duration.toString())
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               );

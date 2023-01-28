@@ -43,7 +43,7 @@ class _HomeState extends State<HomePage> {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.all(13),
+            padding: const EdgeInsets.all(13),
             child: Image.asset(
               "assets/notification.png",
             ),

@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movietest/details/bloc/movie_details_state.dart';
 import 'package:movietest/details/model/movie_details_model.dart';
-import 'package:movietest/details/resource/database/save_data_model.dart';
+import 'package:movietest/details/model/save_data_model.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 
 import '../../Util/colors.dart';
@@ -125,7 +125,7 @@ class _MovieState extends State<MovieDetails> {
                                 },
                                 child: const Icon(
                                   Icons.arrow_back_ios_rounded,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                             ],

@@ -8,3 +8,4 @@ abstract class BookmarkEvent extends Equatable{
 }
 
 class GetBookmarkDetails extends BookmarkEvent {}
+class DeleteBookmarks extends BookmarkEvent {}

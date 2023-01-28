@@ -1,7 +1,6 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:movietest/home/model/nowPlayingModel.dart';
-import 'package:movietest/home/model/popularMoviwModel.dart';
+import 'package:movietest/home/model/popular_movie_model.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();
@@ -16,12 +15,12 @@ class HomeLoading extends HomeState {}
 
 class NowPlayingLoaded extends HomeState {
   final NowPlayingModel nowPlayingModel;
-  const NowPlayingLoaded(this.nowPlayingModel);
+   NowPlayingLoaded(this.nowPlayingModel);
 }
 
 class PopularMovieLoaded extends HomeState {
   final PopularMovieModel popularMovieModel;
-  const PopularMovieLoaded(this.popularMovieModel);
+   PopularMovieLoaded(this.popularMovieModel);
 }
 
 class HomeError extends HomeState {

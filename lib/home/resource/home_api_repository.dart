@@ -1,5 +1,5 @@
 import 'package:movietest/home/model/nowPlayingModel.dart';
-import 'package:movietest/home/model/popularMoviwModel.dart';
+import 'package:movietest/home/model/popular_movie_model.dart';
 
 import 'home_api_provider.dart';
 

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:movietest/Util/util.dart';
 import 'package:movietest/home/model/nowPlayingModel.dart';
-import 'package:movietest/home/model/popularMoviwModel.dart';
+import 'package:movietest/home/model/popular_movie_model.dart';
 
 class ApiProvider {
   final Dio _dio = Dio();
