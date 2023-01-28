@@ -6,8 +6,8 @@ import 'home_api_provider.dart';
 class HomeApiRepository {
   final _provider = ApiProvider();
 
-  Future<NowPlayingModel> fetchNowShowingMovieList() {
-    return _provider.fetchNowShowingMovieList();
+  Future<NowPlayingModel> fetchNowShowingMovieList(int page) {
+    return _provider.fetchNowShowingMovieList(page);
   }
 
   Future<PopularMovieModel> fetchPopularMovieList() {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movietest/app_drawer/app_drawer.dart';
@@ -6,6 +8,7 @@ import 'package:movietest/home/bloc/home_event.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 import 'package:movietest/home/model/nowPlayingModel.dart';
 import 'package:movietest/home/model/popular_movie_model.dart';
+import '../bloc/cubit/home_cubit.dart';
 import '../use_case/movie_onClick.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,14 +19,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomeState extends State<HomePage> {
-  final HomeBloc _homeBloc = HomeBloc();
-  final Home1Bloc _home1Bloc = Home1Bloc();
+  // final HomeBloc _homeBloc = HomeBloc();
+  // final Home1Bloc _home1Bloc = Home1Bloc();
+
+  final scrollController = ScrollController();
+
+  void setupScrollController(context) {
+    scrollController.addListener(() {
+      if (scrollController.position.atEdge) {
+        if (scrollController.position.pixels != 0) {
+          BlocProvider.of<HomeCubit>(context).loadPosts();
+        }
+      }
+    });
+  }
 
   @override
   void initState() {
-    _homeBloc.add(GetNowShowingMovieList());
-    _homeBloc.add(GetNowShowingMovieList());
-    _home1Bloc.add(GetPopularMovieList());
+    // _homeBloc.add(GetNowShowingMovieList());
+    // _homeBloc.add(GetNowShowingMovieList());
+    // _home1Bloc.add(GetPopularMovieList());
     super.initState();
   }
 
@@ -63,128 +78,75 @@ class _HomeState extends State<HomePage> {
         margin: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            BlocProvider(
-              create: (_) => _homeBloc,
-              child: BlocListener<HomeBloc, HomeState>(
-                  listener: (context, state) {
-                    if (state is HomeError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(state.message!),
-                        ),
-                      );
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      BlocBuilder<HomeBloc, HomeState>(
-                        builder: (context, state) {
-                          if (state is HomeInitial) {
-                            return _buildLoading();
-                          } else if (state is HomeLoading) {
-                            return _buildLoading();
-                          }
-                          if (state is NowPlayingLoaded) {
-                            return Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      height: 25,
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text("Now Playing",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold))),
-                                          Align(
-                                              alignment: Alignment.centerRight,
-                                              child: OutlinedButton(
-                                                onPressed: () {},
-                                                child: const Text(
-                                                  'See More',
-                                                  style: TextStyle(
-                                                      color: Colors.black26),
-                                                ),
-                                              )),
-                                        ],
-                                      )),
-                                  SizedBox(
-                                    height: 300,
-                                    child: _buildNowPlaying(
-                                        context, state.nowPlayingModel),
-                                  ),
-                                  const Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "Popular",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ))
-                                ],
-                              ),
-                            );
-                          } else if (state is HomeError) {
-                            return Container();
-                          } else {
-                            return Container();
-                          }
-                        },
-                      ),
-                    ],
-                  )),
-            ),
-            BlocProvider(
-              create: (_) => _home1Bloc,
-              child: BlocListener<Home1Bloc, Home1State>(
-                listener: (context, state) {
-                  if (state is Home1Error) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message!),
-                      ),
-                    );
+            BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+              if (state is HomeLoading && state.isFirstFetch) {
+                return _buildLoading();
+              }
+
+              List<NowPlayingModel> posts = [];
+              bool isLoading = false;
+
+              if (state is HomeLoading) {
+                posts = state.oldPosts;
+                isLoading = true;
+              } else if (state is NowPlayingLoaded) {
+                posts = state.posts;
+              }
+
+              return ListView.separated(
+                scrollDirection: Axis.horizontal,
+                controller: scrollController,
+                itemBuilder: (context, index) {
+                  if (index < posts.length)
+                    return _post(posts[index], context);
+                  else {
+                    Timer(Duration(milliseconds: 30), () {
+                      scrollController
+                          .jumpTo(scrollController.position.maxScrollExtent);
+                    });
+
+                    return _buildLoading();
                   }
                 },
-                child: Expanded(
-                  child: BlocBuilder<Home1Bloc, Home1State>(
-                    builder: (context, state) {
-                      if (state is Home1Initial) {
-                        return _buildLoading();
-                      } else if (state is Home1Loading) {
-                        return _buildLoading();
-                      }
-                      if (state is PopularMovieLoaded) {
-                        return Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: SizedBox(
-                            child:
-                                _buildPopular(context, state.popularMovieModel),
-                          ),
-                        );
-                      } else if (state is Home1Error) {
-                        return Container();
-                      } else {
-                        return Container();
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ),
+                separatorBuilder: (context, index) {
+                  return Divider(
+                    color: Colors.grey[400],
+                  );
+                },
+                itemCount: posts.length + (isLoading ? 1 : 0),
+              );
+            }),
+            // Expanded(
+            //   child: BlocBuilder<Home1Bloc, Home1State>(
+            //     builder: (context, state) {
+            //       if (state is Home1Initial) {
+            //         return _buildLoading();
+            //       } else if (state is Home1Loading) {
+            //         return _buildLoading();
+            //       }
+            //       if (state is PopularMovieLoaded) {
+            //         return Padding(
+            //           padding: const EdgeInsets.all(5),
+            //           child: SizedBox(
+            //             child:
+            //             _buildPopular(context, state.popularMovieModel),
+            //           ),
+            //         );
+            //       } else if (state is Home1Error) {
+            //         return Container();
+            //       } else {
+            //         return Container();
+            //       }
+            //     },
+            //   ),
+            // ),
           ],
         ));
   }
 
   Widget _buildNowPlaying(BuildContext context, NowPlayingModel model) {
     return ListView.builder(
+      controller: scrollController,
       scrollDirection: Axis.horizontal,
       itemCount: model.results!.length,
       itemBuilder: (context, index) {
@@ -328,4 +290,25 @@ class _HomeState extends State<HomePage> {
   }
 
   Widget _buildLoading() => const Center(child: CircularProgressIndicator());
+
+  Widget _post(NowPlayingModel post, BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${post.results}. ${post.dates}",
+            style: const TextStyle(
+                fontSize: 18.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10.0),
+          Text(post.totalPages.toString())
+        ],
+      ),
+    );
+  }
 }

@@ -6,10 +6,10 @@ import 'package:movietest/home/model/popular_movie_model.dart';
 
 class ApiProvider {
   final Dio _dio = Dio();
-  final String _nowPlayingUrl = 'https://api.themoviedb.org/3/movie/now_playing?api_key=${Utill.apiKey}&language=en-US&page=1';
   final String _popularMovieUrl = 'https://api.themoviedb.org/3/movie/popular?api_key=${Utill.apiKey}&language=en-US&page=1';
 
-  Future<NowPlayingModel> fetchNowShowingMovieList() async {
+  Future<NowPlayingModel> fetchNowShowingMovieList(int page) async {
+    final String _nowPlayingUrl = 'https://api.themoviedb.org/3/movie/now_playing?api_key=${Utill.apiKey}&language=en-US&page=$page';
     try {
       Response response = await _dio.get(_nowPlayingUrl);
       return NowPlayingModel.fromJson(response.data);

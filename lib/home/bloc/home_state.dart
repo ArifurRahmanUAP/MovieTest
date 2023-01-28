@@ -13,11 +13,17 @@ class HomeInitial extends HomeState {
   @override
   List<Object?> get props => [];}
 
-class HomeLoading extends HomeState {}
+class HomeLoading extends HomeState {
+  final List<NowPlayingModel> oldPosts;
+  final bool isFirstFetch;
+
+  const HomeLoading(this.oldPosts, {this.isFirstFetch=false});
+}
 
 class NowPlayingLoaded extends HomeState {
-  final NowPlayingModel nowPlayingModel;
-   NowPlayingLoaded(this.nowPlayingModel);
+  final List<NowPlayingModel> posts;
+
+  const NowPlayingLoaded(this.posts);
 }
 
 
@@ -42,7 +48,7 @@ class Home1Loading extends Home1State {}
 
 class PopularMovieLoaded extends Home1State {
   final PopularMovieModel popularMovieModel;
-  PopularMovieLoaded(this.popularMovieModel);
+  const PopularMovieLoaded(this.popularMovieModel);
 }
 
 class Home1Error extends Home1State {
