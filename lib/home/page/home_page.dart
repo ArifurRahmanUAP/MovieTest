@@ -17,14 +17,13 @@ class HomePage extends StatefulWidget {
 
 class _HomeState extends State<HomePage> {
   final HomeBloc _homeBloc = HomeBloc();
+  final Home1Bloc _home1Bloc = Home1Bloc();
 
   @override
   void initState() {
     _homeBloc.add(GetNowShowingMovieList());
-    Future.delayed(const Duration(milliseconds: 300))
-        .then((valueFuture) => _homeBloc.add(GetPopularMovieList()));
-    // _homeBloc.add(GetNowShowingMovieList());
-    // _homeBloc.add(GetPopularMovieList());
+    _homeBloc.add(GetNowShowingMovieList());
+    _home1Bloc.add(GetPopularMovieList());
     super.initState();
   }
 
@@ -61,94 +60,127 @@ class _HomeState extends State<HomePage> {
 
   Widget _buildListHome() {
     return Container(
-      margin: const EdgeInsets.all(8.0),
-      child: BlocProvider(
-        create: (_) => _homeBloc,
-        child: BlocListener<HomeBloc, HomeState>(
-            listener: (context, state) {
-              if (state is HomeError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message!),
-                  ),
-                );
-              }
-            },
-            child: Column(
-              children: [
-                BlocBuilder<HomeBloc, HomeState>(
-                  builder: (context, state) {
-                    if (state is HomeInitial) {
-                      return _buildLoading();
-                    } else if (state is HomeLoading) {
-                      return _buildLoading();
-                    }
-                    if (state is NowPlayingLoaded) {
-                      return Flexible(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                  height: 25,
-                                  width: double.infinity,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text("Now Playing",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                      Align(
-                                          alignment: Alignment.centerRight,
-                                          child: OutlinedButton(
-                                            onPressed: () {},
-                                            child: const Text(
-                                              'See More',
-                                              style: TextStyle(
-                                                  color: Colors.black26),
-                                            ),
-                                          )),
-                                    ],
-                                  )),
-                              SizedBox(
-                                height: 300,
-                                child: _buildNowPlaying(
-                                    context, state.nowPlayingModel),
-                              ),
-                              const Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Popular",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ))
-                            ],
-                          ),
+        margin: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            BlocProvider(
+              create: (_) => _homeBloc,
+              child: BlocListener<HomeBloc, HomeState>(
+                  listener: (context, state) {
+                    if (state is HomeError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.message!),
                         ),
                       );
-                    } else if (state is HomeError) {
-                      return Container();
-                    }
-                    if (state is PopularMovieLoaded) {
-                      return SizedBox(
-                        child: _buildPopular(context, state.popularMovieModel),
-                      );
-                    } else {
-                      return Container();
                     }
                   },
+                  child: Column(
+                    children: [
+                      BlocBuilder<HomeBloc, HomeState>(
+                        builder: (context, state) {
+                          if (state is HomeInitial) {
+                            return _buildLoading();
+                          } else if (state is HomeLoading) {
+                            return _buildLoading();
+                          }
+                          if (state is NowPlayingLoaded) {
+                            return Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                      height: 25,
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text("Now Playing",
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold))),
+                                          Align(
+                                              alignment: Alignment.centerRight,
+                                              child: OutlinedButton(
+                                                onPressed: () {},
+                                                child: const Text(
+                                                  'See More',
+                                                  style: TextStyle(
+                                                      color: Colors.black26),
+                                                ),
+                                              )),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    height: 300,
+                                    child: _buildNowPlaying(
+                                        context, state.nowPlayingModel),
+                                  ),
+                                  const Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "Popular",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ))
+                                ],
+                              ),
+                            );
+                          } else if (state is HomeError) {
+                            return Container();
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                    ],
+                  )),
+            ),
+            BlocProvider(
+              create: (_) => _home1Bloc,
+              child: BlocListener<Home1Bloc, Home1State>(
+                listener: (context, state) {
+                  if (state is Home1Error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.message!),
+                      ),
+                    );
+                  }
+                },
+                child: Expanded(
+                  child: BlocBuilder<Home1Bloc, Home1State>(
+                    builder: (context, state) {
+                      if (state is Home1Initial) {
+                        return _buildLoading();
+                      } else if (state is Home1Loading) {
+                        return _buildLoading();
+                      }
+                      if (state is PopularMovieLoaded) {
+                        return Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: SizedBox(
+                            child:
+                                _buildPopular(context, state.popularMovieModel),
+                          ),
+                        );
+                      } else if (state is Home1Error) {
+                        return Container();
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
                 ),
-              ],
-            )),
-      ),
-    );
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget _buildNowPlaying(BuildContext context, NowPlayingModel model) {
@@ -208,8 +240,7 @@ class _HomeState extends State<HomePage> {
 
   Widget _buildPopular(BuildContext context, PopularMovieModel model) {
     return Container(
-      margin: const EdgeInsets.only(top: 300),
-      height: 300,
+      margin: const EdgeInsets.all(5),
       child: SafeArea(
         child: ListView.builder(
             itemCount: model.results!.length,
@@ -231,7 +262,7 @@ class _HomeState extends State<HomePage> {
                               const BorderRadius.all(Radius.circular(10)),
                           child: Image.network(
                             "https://image.tmdb.org/t/p/w500${model.results![index].posterPath}",
-                            height: 140,
+                            height: 135,
                             width: 100,
                           ),
                         ),
@@ -269,32 +300,6 @@ class _HomeState extends State<HomePage> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              // SizedBox(
-                              //   height: 25,
-                              //   child: Expanded(
-                              //     child: ListView.builder(
-                              //         physics: const ClampingScrollPhysics(),
-                              //         shrinkWrap: true,
-                              //         scrollDirection: Axis.horizontal,
-                              //         itemCount: split.length,
-                              //         itemBuilder: (context, index) {
-                              //           return Row(
-                              //             children: [
-                              //               OutlinedButton(
-                              //                   onPressed: () {},
-                              //                   child: Text(
-                              //                     split[index],
-                              //                     style: const TextStyle(
-                              //                         color: Colors.black),
-                              //                   )),
-                              //               const SizedBox(
-                              //                 width: 3,
-                              //               )
-                              //             ],
-                              //           );
-                              //         }),
-                              //   ),
-                              // ),
                               const SizedBox(
                                 height: 10,
                               ),
