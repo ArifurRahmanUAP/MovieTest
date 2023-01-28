@@ -9,21 +9,31 @@ abstract class HomeState extends Equatable {
   List<Object?> get props => [];
 }
 
-class HomeInitial extends HomeState {}
+class HomeInitial extends HomeState {
+  @override
+  List<Object?> get props => [];}
 
-class HomeLoading extends HomeState {}
+class HomeLoading extends HomeState {
+  @override
+  List<Object?> get props => [];}
 
 class NowPlayingLoaded extends HomeState {
   final NowPlayingModel nowPlayingModel;
    NowPlayingLoaded(this.nowPlayingModel);
-}
+
+  @override
+  List<Object?> get props => [];}
 
 class PopularMovieLoaded extends HomeState {
   final PopularMovieModel popularMovieModel;
    PopularMovieLoaded(this.popularMovieModel);
-}
+
+  @override
+  List<Object?> get props => [];}
 
 class HomeError extends HomeState {
   final String? message;
   const HomeError(this.message);
+  @override
+  List<Object?> get props => [];
 }

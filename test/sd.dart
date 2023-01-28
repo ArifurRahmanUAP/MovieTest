@@ -1,156 +1,73 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movietest/app_drawer/app_drawer.dart';
 import 'package:movietest/home/bloc/home_bloc.dart';
 import 'package:movietest/home/bloc/home_event.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 import 'package:movietest/home/model/nowPlayingModel.dart';
 import 'package:movietest/home/model/popular_movie_model.dart';
-import '../use_case/movie_onClick.dart';
+import 'package:movietest/home/use_case/movie_onClick.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _HomeState();
-}
-
-class _HomeState extends State<HomePage> {
-  final HomeBloc _homeBloc = HomeBloc();
-
-  @override
-  void initState() {
-    _homeBloc.add(GetNowShowingMovieList());
-    Future.delayed(const Duration(milliseconds: 300))
-        .then((valueFuture) => _homeBloc.add(GetPopularMovieList()));
-    // _homeBloc.add(GetNowShowingMovieList());
-    // _homeBloc.add(GetPopularMovieList());
-    super.initState();
-  }
+class TestScreen extends StatelessWidget {
+  const TestScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          'Movie List',
-          style: TextStyle(color: Colors.black),
-        ),
-        elevation: 0,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu_open_sharp),
-            onPressed: () => Scaffold.of(context).openDrawer(),
+    return BlocProvider(
+        create: (context) => HomeBloc()..add(GetNowShowingMovieList()),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Test'),
           ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(13),
-            child: Image.asset(
-              "assets/notification.png",
-            ),
-          ),
-        ],
-        centerTitle: true,
-      ),
-      body: _buildListHome(),
-      drawer: AppDrawer(),
-    );
-  }
-
-  Widget _buildListHome() {
-    return Container(
-      margin: const EdgeInsets.all(8.0),
-      child: BlocProvider(
-        create: (_) => _homeBloc,
-        child: BlocListener<HomeBloc, HomeState>(
-            listener: (context, state) {
-              if (state is HomeError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message!),
+          body: Stack(
+            children: [
+              Builder(builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () =>
+                              context.read<HomeBloc>().add( GetNowShowingMovieList()),
+                          child: const Text("Event1")),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                          onPressed: () => context
+                              .read<HomeBloc>()
+                              .add(GetPopularMovieList()),
+                          child: const Text("Event2")),
+                      const SizedBox(width: 10),
+                    ],
                   ),
                 );
-              }
-            },
-            child: Column(
-              children: [
-                BlocBuilder<HomeBloc, HomeState>(
-                  builder: (context, state) {
-                    if (state is HomeInitial) {
-                      return _buildLoading();
-                    } else if (state is HomeLoading) {
-                      return _buildLoading();
-                    }
-                    if (state is NowPlayingLoaded) {
-                      return Flexible(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                  height: 25,
-                                  width: double.infinity,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text("Now Playing",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                      Align(
-                                          alignment: Alignment.centerRight,
-                                          child: OutlinedButton(
-                                            onPressed: () {},
-                                            child: const Text(
-                                              'See More',
-                                              style: TextStyle(
-                                                  color: Colors.black26),
-                                            ),
-                                          )),
-                                    ],
-                                  )),
-                              SizedBox(
-                                height: 300,
-                                child: _buildNowPlaying(
-                                    context, state.nowPlayingModel),
-                              ),
-                              const Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Popular",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ))
-                            ],
-                          ),
-                        ),
-                      );
-                    } else if (state is HomeError) {
-                      return Container();
-                    }
-                    if (state is PopularMovieLoaded) {
-                      return SizedBox(
-                        child: _buildPopular(context, state.popularMovieModel),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-              ],
-            )),
-      ),
-    );
+              }),
+              BlocBuilder<HomeBloc, HomeState>(
+                builder: (context, state) {
+                  if (state is NowPlayingLoaded) {
+                    return const Center(child: Text("I am state 1"));
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BlocBuilder<HomeBloc, HomeState>(
+                    builder: (context, state) {
+                      if (state is PopularMovieLoaded) {
+                        return Center(
+                            child: Text("I am state 2 state.message"));
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ));
   }
-
   Widget _buildNowPlaying(BuildContext context, NowPlayingModel model) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
@@ -228,7 +145,7 @@ class _HomeState extends State<HomePage> {
                       children: [
                         ClipRRect(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                          const BorderRadius.all(Radius.circular(10)),
                           child: Image.network(
                             "https://image.tmdb.org/t/p/w500${model.results![index].posterPath}",
                             height: 140,
@@ -321,6 +238,4 @@ class _HomeState extends State<HomePage> {
       ),
     );
   }
-
-  Widget _buildLoading() => const Center(child: CircularProgressIndicator());
 }
