@@ -10,7 +10,7 @@ class HomeCubit extends Cubit<HomeState> {
   final HomeApiRepository repository;
 
   void loadPosts() {
-    if (state is HomeLoading) return;
+    if (state is NowPlayingLoading) return;
 
     final currentState = state;
 
@@ -19,12 +19,12 @@ class HomeCubit extends Cubit<HomeState> {
       oldPosts = currentState.posts;
     }
 
-    emit(HomeLoading(oldPosts, isFirstFetch: page == 1));
+    emit(NowPlayingLoading(oldPosts, isFirstFetch: page == 1));
 
     repository.fetchNowShowingMovieList(page).then((newPosts) {
       page++;
 
-      final posts = (state as HomeLoading).oldPosts;
+      final posts = (state as NowPlayingLoading).oldPosts;
       posts.addAll(newPosts);
 
       emit(NowPlayingLoaded(posts));

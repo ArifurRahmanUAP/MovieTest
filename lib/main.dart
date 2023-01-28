@@ -2,13 +2,19 @@
 import 'package:flutter/material.dart';
 
 import 'home/page/home_page.dart';
+import 'home/resource/home_api_provider.dart';
+import 'home/resource/home_api_repository.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp(
+    repository: HomeApiRepository(ApiProvider()),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final HomeApiRepository repository;
+
+  const MyApp({required this.repository}) ;
 
   // This widget is the root of your application.
   @override

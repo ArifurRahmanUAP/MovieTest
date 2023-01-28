@@ -13,11 +13,11 @@ class HomeInitial extends HomeState {
   @override
   List<Object?> get props => [];}
 
-class HomeLoading extends HomeState {
+class NowPlayingLoading extends HomeState {
   final List<NowPlayingModel> oldPosts;
   final bool isFirstFetch;
 
-  const HomeLoading(this.oldPosts, {this.isFirstFetch=false});
+  NowPlayingLoading(this.oldPosts, {this.isFirstFetch=false});
 }
 
 class NowPlayingLoaded extends HomeState {

@@ -4,15 +4,17 @@ import 'package:movietest/home/model/popular_movie_model.dart';
 import 'home_api_provider.dart';
 
 class HomeApiRepository {
-  final _provider = ApiProvider();
+  final ApiProvider apiProvider;
+  HomeApiRepository(this.apiProvider);
 
-  Future<NowPlayingModel> fetchNowShowingMovieList(int page) {
-    return _provider.fetchNowShowingMovieList(page);
+  Future<List<NowPlayingModel>> fetchNowShowingMovieList(int page) async {
+    final posts = await apiProvider.fetchNowShowingMovieList(page);
+    return posts.map((e) => NowPlayingModel.fromJson(e)).toList();
   }
 
-  Future<PopularMovieModel> fetchPopularMovieList() {
-    return _provider.fetchPopularMovieList();
-  }
+  // Future<PopularMovieModel> fetchPopularMovieList() {
+  //   return apiProvider.fetchPopularMovieList(1);
+  // }
 }
 
-class NetworkError extends Error {}
+// class NetworkError extends Error {}

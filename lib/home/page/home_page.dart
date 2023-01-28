@@ -44,6 +44,8 @@ class _HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    setupScrollController(context);
+    BlocProvider.of<HomeCubit>(context).loadPosts();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -74,74 +76,44 @@ class _HomeState extends State<HomePage> {
   }
 
   Widget _buildListHome() {
-    return Container(
-        margin: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
-              if (state is HomeLoading && state.isFirstFetch) {
-                return _buildLoading();
-              }
+    return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+      if (state is NowPlayingLoading && state.isFirstFetch) {
+        return _buildLoading();
+      }
 
-              List<NowPlayingModel> posts = [];
-              bool isLoading = false;
+      List<NowPlayingModel> posts = [];
+      bool isLoading = false;
 
-              if (state is HomeLoading) {
-                posts = state.oldPosts;
-                isLoading = true;
-              } else if (state is NowPlayingLoaded) {
-                posts = state.posts;
-              }
+      if (state is NowPlayingLoading) {
+        posts = state.oldPosts;
+        isLoading = true;
+      } else if (state is NowPlayingLoaded) {
+        posts = state.posts;
+      }
 
-              return ListView.separated(
-                scrollDirection: Axis.horizontal,
-                controller: scrollController,
-                itemBuilder: (context, index) {
-                  if (index < posts.length)
-                    return _post(posts[index], context);
-                  else {
-                    Timer(Duration(milliseconds: 30), () {
-                      scrollController
-                          .jumpTo(scrollController.position.maxScrollExtent);
-                    });
+      return ListView.separated(
+        scrollDirection: Axis.horizontal,
+        controller: scrollController,
+        itemBuilder: (context, index) {
+          if (index < posts.length)
+            return _post(posts[index], context);
+          else {
+            Timer(Duration(milliseconds: 30), () {
+              scrollController
+                  .jumpTo(scrollController.position.maxScrollExtent);
+            });
 
-                    return _buildLoading();
-                  }
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(
-                    color: Colors.grey[400],
-                  );
-                },
-                itemCount: posts.length + (isLoading ? 1 : 0),
-              );
-            }),
-            // Expanded(
-            //   child: BlocBuilder<Home1Bloc, Home1State>(
-            //     builder: (context, state) {
-            //       if (state is Home1Initial) {
-            //         return _buildLoading();
-            //       } else if (state is Home1Loading) {
-            //         return _buildLoading();
-            //       }
-            //       if (state is PopularMovieLoaded) {
-            //         return Padding(
-            //           padding: const EdgeInsets.all(5),
-            //           child: SizedBox(
-            //             child:
-            //             _buildPopular(context, state.popularMovieModel),
-            //           ),
-            //         );
-            //       } else if (state is Home1Error) {
-            //         return Container();
-            //       } else {
-            //         return Container();
-            //       }
-            //     },
-            //   ),
-            // ),
-          ],
-        ));
+            return _buildLoading();
+          }
+        },
+        separatorBuilder: (context, index) {
+          return Divider(
+            color: Colors.grey[400],
+          );
+        },
+        itemCount: posts.length + (isLoading ? 1 : 0),
+      );
+    });
   }
 
   Widget _buildNowPlaying(BuildContext context, NowPlayingModel model) {
@@ -299,14 +271,14 @@ class _HomeState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "${post.results}. ${post.dates}",
+            "s",
             style: const TextStyle(
                 fontSize: 18.0,
                 color: Colors.black,
                 fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10.0),
-          Text(post.totalPages.toString())
+          Text("post.totalPages.toString()")
         ],
       ),
     );
