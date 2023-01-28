@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movietest/Util/helper.dart';
 import 'package:movietest/bookmarks/bloc/movie_details_Bloc.dart';
 import 'package:movietest/bookmarks/bloc/movie_details_event.dart';
 import 'package:movietest/bookmarks/bloc/movie_details_state.dart';
@@ -90,7 +88,6 @@ class BookmarkPageState extends State<BookmarkPage> {
 
   Widget buildCard(BuildContext context, List<SaveDataModel> model) {
     return SizedBox(
-      height: Helper.getScreenHeight(context),
       child: SafeArea(
         child: ListView.builder(
             shrinkWrap: true,
@@ -108,105 +105,114 @@ class BookmarkPageState extends State<BookmarkPage> {
                   elevation: 3,
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          child: Image.network(
-                            "https://image.tmdb.org/t/p/w500${model[index].image}",
-                            height: 140,
-                            width: 100,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            flex: 3,
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              child: Image.network(
+                                "https://image.tmdb.org/t/p/w500${model[index].image}",
+                                height: 140,
+                                width: 100,
+                              ),
+                            ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                          Flexible(
+                            flex: 8,
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    model[index].name.toString(),
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                  ),
-                                  Text("${model[index].rating}/10 IMDb"),
-                                  GestureDetector(
-                                    onTap: (){
-                                      BookmarkDeleteClick.onPress(context, dataBaseHelper, model[index].movieId);
-                                    },
-                                    child: const Align(
-                                      alignment: AlignmentDirectional.centerEnd,
-                                      child: Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
+                                  Row(
+                                    children: [
+                                      Text(
+                                        model[index].name.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
                                       ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                height: 25,
-                                child: Expanded(
-                                  child: ListView.builder(
-                                      physics: const ClampingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: split.length,
-                                      itemBuilder: (context, index) {
-                                        return Row(
-                                          children: [
-                                            OutlinedButton(
-                                                onPressed: () {},
-                                                child: Text(
-                                                  split[index],
-                                                  style: const TextStyle(
-                                                      color: Colors.black),
-                                                )),
-                                            const SizedBox(
-                                              width: 3,
-                                            )
-                                          ],
-                                        );
-                                      }),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.timer_outlined,
-                                    color: Colors.black,
+                                    ],
                                   ),
-                                  Text(model[index].duration.toString())
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                      ),
+                                      Text("${model[index].rating}/10 IMDb"),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  SizedBox(
+                                    height: 25,
+                                    child: Expanded(
+                                      child: ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: split.length,
+                                          itemBuilder: (context, index) {
+                                            return Row(
+                                              children: [
+                                                OutlinedButton(
+                                                    onPressed: () {},
+                                                    child: Text(
+                                                      split[index],
+                                                      style: const TextStyle(
+                                                          color: Colors.black),
+                                                    )),
+                                                const SizedBox(
+                                                  width: 3,
+                                                )
+                                              ],
+                                            );
+                                          }),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.timer_outlined,
+                                        color: Colors.black,
+                                      ),
+                                      Text(model[index].duration.toString())
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        )
-                      ],
+                          Flexible(
+                            flex: 1,
+                            child: GestureDetector(
+                              onTap: (){
+                                WidgetsBinding.instance.addPostFrameCallback((_) => setState(                                  BookmarkDeleteClick.onPress(context, dataBaseHelper, model[index].movieId)));
+                              },
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                                size: 35,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
