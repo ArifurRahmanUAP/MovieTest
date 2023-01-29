@@ -1,7 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movietest/details/resource/movie_details_api_provider.dart';
 import 'package:movietest/details/resource/movie_details_api_repository.dart';
-
 import 'movie_details_event.dart';
 import 'movie_details_state.dart';
 

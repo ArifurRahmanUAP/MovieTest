@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../resource/home_api_repository.dart';
 import 'home_event.dart';
 import 'home_state.dart';

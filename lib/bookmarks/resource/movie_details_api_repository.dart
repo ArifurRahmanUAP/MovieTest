@@ -1,4 +1,3 @@
-
 import '../../details/resource/database/database.dart';
 import '../../details/model/save_data_model.dart';
 
@@ -8,5 +7,4 @@ class BookmarkDataRepository {
     return dataBaseHelper.fetchBookmark();
   }
 }
-
 class NetworkError extends Error {}

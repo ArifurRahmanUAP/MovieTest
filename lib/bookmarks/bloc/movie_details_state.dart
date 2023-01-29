@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:movietest/details/model/movie_details_model.dart';
 import 'package:movietest/details/model/save_data_model.dart';
-import 'package:movietest/home/model/nowPlayingModel.dart';
 
 abstract class BookmarkState extends Equatable {
   const BookmarkState();

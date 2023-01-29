@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:movietest/details/model/save_data_model.dart';
 import 'package:sqflite/sqflite.dart';

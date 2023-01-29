@@ -5,7 +5,6 @@ import 'package:movietest/bookmarks/bloc/movie_details_event.dart';
 import 'package:movietest/bookmarks/bloc/movie_details_state.dart';
 import 'package:movietest/details/model/save_data_model.dart';
 import 'package:movietest/home/page/home_page.dart';
-
 import '../../Util/helper.dart';
 import '../../details/resource/database/database.dart';
 import '../use_case/bookMark_onClick.dart';
@@ -168,7 +167,7 @@ class BookmarkPageState extends State<BookmarkPage> {
                                     height: 10,
                                   ),
                                   SizedBox(
-                                    height: 25,
+                                    height: 30,
                                     child: ListView.builder(
                                         shrinkWrap: true,
                                         scrollDirection: Axis.horizontal,
@@ -181,7 +180,7 @@ class BookmarkPageState extends State<BookmarkPage> {
                                                   child: Text(
                                                     split[index],
                                                     style: const TextStyle(
-                                                        color: Colors.black),
+                                                        color: Colors.blue),
                                                   )),
                                               const SizedBox(
                                                 width: 3,
