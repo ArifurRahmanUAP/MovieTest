@@ -26,10 +26,10 @@ class _MovieState extends State<MovieDetails> {
   late DataBaseHelper dataBaseHelper = DataBaseHelper();
   StringBuffer saveDatas = StringBuffer();
 
-  Future isSavedMovie()async{
+  Future isSavedMovie() async {
     await dataBaseHelper.init();
     isSaved = await dataBaseHelper.fetchIsBookmarked(widget.movieId);
-}
+  }
 
   @override
   void initState() {
@@ -181,42 +181,53 @@ class _MovieState extends State<MovieDetails> {
                                             ),
                                             GestureDetector(
                                                 onTap: () {
-                                                  for (var value
-                                                      in model.genres!) {
-                                                    saveDatas.write(
-                                                        "${value.name},");
-                                                  }
+                                                  if (isSaved) {
+                                                    dataBaseHelper.deletesaveDataItem(model.id);
+                                                  } else {
+                                                    for (var value
+                                                        in model.genres!) {
+                                                      saveDatas.write(
+                                                          "${value.name},");
+                                                    }
 
-                                                  SaveDataModel saveDataModel =
-                                                      SaveDataModel(
-                                                          movieId: model.id,
-                                                          name: model
-                                                              .originalTitle
-                                                              .toString(),
-                                                          rating: model
-                                                              .voteAverage
-                                                              .toString(),
-                                                          genres: saveDatas
-                                                              .toString()
-                                                              .substring(
-                                                                  0,
-                                                                  saveDatas
-                                                                          .length -
-                                                                      1),
-                                                          duration:
-                                                              durationToString(
-                                                                  model
-                                                                      .runtime),
-                                                          image: model
-                                                              .posterPath
-                                                              .toString());
-                                                  SaveData.onPress(
-                                                      context,
-                                                      saveDataModel,
-                                                      dataBaseHelper);
+                                                    SaveDataModel
+                                                        saveDataModel =
+                                                        SaveDataModel(
+                                                            movieId: model.id,
+                                                            name: model
+                                                                .originalTitle
+                                                                .toString(),
+                                                            rating: model
+                                                                .voteAverage
+                                                                .toString(),
+                                                            genres: saveDatas
+                                                                .toString()
+                                                                .substring(
+                                                                    0,
+                                                                    saveDatas
+                                                                            .length -
+                                                                        1),
+                                                            duration:
+                                                                durationToString(
+                                                                    model
+                                                                        .runtime),
+                                                            image: model
+                                                                .posterPath
+                                                                .toString());
+                                                    SaveData.onPress(
+                                                        context,
+                                                        saveDataModel,
+                                                        dataBaseHelper);
+                                                  }
+                                                  isSaved = !isSaved;
+                                                  setState(() {
+
+                                                  });
                                                 },
-                                                child: isSaved?const Icon(
-                                                    Icons.bookmark):const Icon(Icons.bookmark_border))
+                                                child: isSaved
+                                                    ? const Icon(Icons.bookmark)
+                                                    : const Icon(
+                                                        Icons.bookmark_border))
                                           ],
                                         ),
                                       ),
