@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movietest/Util/helper.dart';
 import 'package:movietest/app_drawer/app_drawer.dart';
 import 'package:movietest/home/bloc/home_bloc.dart';
 import 'package:movietest/home/bloc/home_event.dart';
@@ -267,20 +268,24 @@ class _HomeState extends State<HomePage> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.only(left: 10),
+                          margin: const EdgeInsets.only(left: 5),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    model.results![index].originalTitle
-                                        .toString(),
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                  SizedBox(
+                                    width: Helper.getScreenWidth(context)*.55,
+                                    child: Text(
+                                      model.results![index].originalTitle
+                                          .toString(),
+                                      softWrap: true,
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
                                   ),
                                 ],
                               ),

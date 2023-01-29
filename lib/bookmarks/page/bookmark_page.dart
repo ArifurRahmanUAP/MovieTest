@@ -6,6 +6,7 @@ import 'package:movietest/bookmarks/bloc/movie_details_state.dart';
 import 'package:movietest/details/model/save_data_model.dart';
 import 'package:movietest/home/page/home_page.dart';
 
+import '../../Util/helper.dart';
 import '../../details/resource/database/database.dart';
 import '../use_case/bookMark_onClick.dart';
 import '../use_case/bookmark_delete_click.dart';
@@ -37,7 +38,8 @@ class BookmarkPageState extends State<BookmarkPage> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const HomePage()));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const HomePage()));
           },
           child: const Icon(
             Icons.arrow_back_ios_rounded,
@@ -96,7 +98,7 @@ class BookmarkPageState extends State<BookmarkPage> {
             itemBuilder: (context, index) {
               split = model[index].genres?.split(",");
               return GestureDetector(
-                onTap: (){
+                onTap: () {
                   BookmarkClick.onPress(context, model[index].movieId);
                 },
                 child: Card(
@@ -126,17 +128,22 @@ class BookmarkPageState extends State<BookmarkPage> {
                             child: Container(
                               margin: const EdgeInsets.only(left: 10),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
-                                      Text(
-                                        model[index].name.toString(),
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                      SizedBox(
+                                        width: Helper.getScreenWidth(context) *
+                                            .55,
+                                        child: Text(
+                                          model[index].name.toString(),
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -157,35 +164,34 @@ class BookmarkPageState extends State<BookmarkPage> {
                                   ),
                                   SizedBox(
                                     height: 25,
-                                    child: Expanded(
-                                      child: ListView.builder(
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: split.length,
-                                          itemBuilder: (context, index) {
-                                            return Row(
-                                              children: [
-                                                OutlinedButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      split[index],
-                                                      style: const TextStyle(
-                                                          color: Colors.black),
-                                                    )),
-                                                const SizedBox(
-                                                  width: 3,
-                                                )
-                                              ],
-                                            );
-                                          }),
-                                    ),
+                                    child: ListView.builder(
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: split.length,
+                                        itemBuilder: (context, index) {
+                                          return Row(
+                                            children: [
+                                              OutlinedButton(
+                                                  onPressed: () {},
+                                                  child: Text(
+                                                    split[index],
+                                                    style: const TextStyle(
+                                                        color: Colors.black),
+                                                  )),
+                                              const SizedBox(
+                                                width: 3,
+                                              )
+                                            ],
+                                          );
+                                        }),
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       const Icon(
                                         Icons.timer_outlined,
@@ -201,8 +207,12 @@ class BookmarkPageState extends State<BookmarkPage> {
                           Flexible(
                             flex: 1,
                             child: GestureDetector(
-                              onTap: (){
-                                WidgetsBinding.instance.addPostFrameCallback((_) => setState(                                  BookmarkDeleteClick.onPress(context, dataBaseHelper, model[index].movieId)));
+                              onTap: () {
+                                (BookmarkDeleteClick.onPress(context,
+                                    dataBaseHelper, model[index].movieId));
+
+                                model.remove(model[index]);
+                                setState(() {});
                               },
                               child: const Icon(
                                 Icons.delete,

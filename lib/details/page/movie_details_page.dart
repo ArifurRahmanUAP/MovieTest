@@ -5,8 +5,6 @@ import 'package:movietest/details/bloc/movie_details_state.dart';
 import 'package:movietest/details/model/movie_details_model.dart';
 import 'package:movietest/details/model/save_data_model.dart';
 import 'package:movietest/home/bloc/home_state.dart';
-
-import '../../Util/colors.dart';
 import '../../Util/helper.dart';
 import '../bloc/movie_details_Bloc.dart';
 import '../bloc/movie_details_event.dart';
@@ -23,12 +21,20 @@ class MovieDetails extends StatefulWidget {
 }
 
 class _MovieState extends State<MovieDetails> {
+  late bool isSaved;
   late MovieDetailsBloc _movieDetailsBloc;
   late DataBaseHelper dataBaseHelper = DataBaseHelper();
   StringBuffer saveDatas = StringBuffer();
 
+  Future isSavedMovie()async{
+    await dataBaseHelper.init();
+    isSaved = await dataBaseHelper.fetchIsBookmarked(widget.movieId);
+}
+
   @override
   void initState() {
+    isSavedMovie();
+    isSaved = false;
     _movieDetailsBloc = MovieDetailsBloc(widget.movieId);
     _movieDetailsBloc.add(GetMovieDetails());
     dataBaseHelper.init();
@@ -177,7 +183,8 @@ class _MovieState extends State<MovieDetails> {
                                                 onTap: () {
                                                   for (var value
                                                       in model.genres!) {
-                                                    saveDatas.write("${value.name},");
+                                                    saveDatas.write(
+                                                        "${value.name},");
                                                   }
 
                                                   SaveDataModel saveDataModel =
@@ -189,7 +196,13 @@ class _MovieState extends State<MovieDetails> {
                                                           rating: model
                                                               .voteAverage
                                                               .toString(),
-                                                          genres: saveDatas.toString().substring(0, saveDatas.length - 1),
+                                                          genres: saveDatas
+                                                              .toString()
+                                                              .substring(
+                                                                  0,
+                                                                  saveDatas
+                                                                          .length -
+                                                                      1),
                                                           duration:
                                                               durationToString(
                                                                   model
@@ -202,8 +215,8 @@ class _MovieState extends State<MovieDetails> {
                                                       saveDataModel,
                                                       dataBaseHelper);
                                                 },
-                                                child:
-                                                    const Icon(Icons.bookmark))
+                                                child: isSaved?const Icon(
+                                                    Icons.bookmark):const Icon(Icons.bookmark_border))
                                           ],
                                         ),
                                       ),

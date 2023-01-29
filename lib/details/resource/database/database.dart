@@ -39,6 +39,15 @@ class DataBaseHelper {
     );
   }
 
+  Future<bool> fetchIsBookmarked(int? id) async {
+    print(id);
+    var list = await _db.rawQuery("Select * from movielist where movieId=$id");
+    if (list.isEmpty) {
+      return false;
+    } else
+      return true;
+  }
+
   Future<List<SaveDataModel>> fetchBookmark() async {
     if (_db == null) {
       throw "bd is not initiated, initiate using [init(db)] function";
