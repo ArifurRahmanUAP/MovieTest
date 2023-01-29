@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movietest/Util/duration.dart';
 import 'package:movietest/details/bloc/movie_details_state.dart';
 import 'package:movietest/details/model/movie_details_model.dart';
 import 'package:movietest/details/model/save_data_model.dart';
+import 'package:movietest/details/use_case/add_remove_bookmark.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 import '../../Util/helper.dart';
 import '../bloc/movie_details_Bloc.dart';
@@ -181,48 +183,15 @@ class _MovieState extends State<MovieDetails> {
                                             ),
                                             GestureDetector(
                                                 onTap: () {
-                                                  if (isSaved) {
-                                                    dataBaseHelper.deletesaveDataItem(model.id);
-                                                  } else {
-                                                    for (var value
-                                                        in model.genres!) {
-                                                      saveDatas.write(
-                                                          "${value.name},");
-                                                    }
-
-                                                    SaveDataModel
-                                                        saveDataModel =
-                                                        SaveDataModel(
-                                                            movieId: model.id,
-                                                            name: model
-                                                                .originalTitle
-                                                                .toString(),
-                                                            rating: model
-                                                                .voteAverage
-                                                                .toString(),
-                                                            genres: saveDatas
-                                                                .toString()
-                                                                .substring(
-                                                                    0,
-                                                                    saveDatas
-                                                                            .length -
-                                                                        1),
-                                                            duration:
-                                                                durationToString(
-                                                                    model
-                                                                        .runtime),
-                                                            image: model
-                                                                .posterPath
-                                                                .toString());
-                                                    SaveData.onPress(
-                                                        context,
-                                                        saveDataModel,
-                                                        dataBaseHelper);
-                                                  }
+                                                  SaveDeleteData.onPress(
+                                                      context,
+                                                      model,
+                                                      dataBaseHelper,
+                                                      isSaved,
+                                                      saveDatas);
                                                   isSaved = !isSaved;
-                                                  setState(() {
 
-                                                  });
+                                                  setState(() {});
                                                 },
                                                 child: isSaved
                                                     ? const Icon(Icons.bookmark)
@@ -303,8 +272,9 @@ class _MovieState extends State<MovieDetails> {
                                                   textAlign: TextAlign.start,
                                                 ),
                                                 Text(
-                                                  durationToString(
-                                                      model.runtime),
+                                                  DurationCalculate
+                                                      .durationToString(
+                                                          model.runtime),
                                                   style: const TextStyle(
                                                     color: Colors.black,
                                                   ),
@@ -407,10 +377,4 @@ class _MovieState extends State<MovieDetails> {
   }
 
   Widget _buildLoading() => const Center(child: CircularProgressIndicator());
-
-  String durationToString(int? minutes) {
-    var d = Duration(minutes: minutes!);
-    List<String> parts = d.toString().split(':');
-    return '${parts[0].padLeft(2, '0')}h ${parts[1].padLeft(2, '0')}min';
-  }
 }
