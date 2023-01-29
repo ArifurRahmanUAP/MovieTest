@@ -38,9 +38,12 @@ class _HomeState extends State<HomePage> {
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.white,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.menu_open_sharp),
+            icon: const Icon(Icons.menu_open_sharp,color: Colors.black,),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -99,7 +102,7 @@ class _HomeState extends State<HomePage> {
                                         children: [
                                           const Align(
                                               alignment: Alignment.centerLeft,
-                                              child: Text("Now Playing",
+                                              child: Text("Now Showing",
                                                   style: TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:

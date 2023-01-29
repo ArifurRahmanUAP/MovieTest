@@ -36,6 +36,8 @@ class BookmarkPageState extends State<BookmarkPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).push(
@@ -46,7 +48,10 @@ class BookmarkPageState extends State<BookmarkPage> {
             color: Colors.black,
           ),
         ),
-        title: const Text("Bookmark"),
+        title: const Text(
+          "Bookmark",
+          style: TextStyle(color: Colors.black),
+        ),
         elevation: 0,
       ),
       body: _buildBookmark(),

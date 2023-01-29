@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movietest/Util/duration.dart';
 import 'package:movietest/details/bloc/movie_details_state.dart';
 import 'package:movietest/details/model/movie_details_model.dart';
-import 'package:movietest/details/model/save_data_model.dart';
 import 'package:movietest/details/use_case/add_remove_bookmark.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 import '../../Util/helper.dart';
 import '../bloc/movie_details_Bloc.dart';
 import '../bloc/movie_details_event.dart';
 import '../resource/database/database.dart';
-import '../use_case/save_data.dart';
 
 class MovieDetails extends StatefulWidget {
   int? movieId;
@@ -109,7 +106,7 @@ class _MovieState extends State<MovieDetails> {
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            stops: [0.0, 0.0],
+                            stops: const [0.0, 0.0],
                             colors: [
                               Colors.black.withOpacity(0.9),
                               Colors.black.withOpacity(0.0),
@@ -210,7 +207,7 @@ class _MovieState extends State<MovieDetails> {
                                               color: Colors.yellow,
                                             ),
                                             Text(
-                                              "${model.voteAverage}/10 IMDb",
+                                              "${model.voteAverage!.toStringAsFixed(2)}/10 IMDb",
                                               style: const TextStyle(
                                                   color: Colors.black38),
                                             )
