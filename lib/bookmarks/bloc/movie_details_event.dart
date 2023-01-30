@@ -8,4 +8,13 @@ abstract class BookmarkEvent extends Equatable{
 }
 
 class GetBookmarkDetails extends BookmarkEvent {}
-class DeleteBookmarks extends BookmarkEvent {}
+
+
+abstract class BookmarkGenresEvent extends Equatable{
+  const BookmarkGenresEvent();
+
+  @override
+  List<Object> get props =>[];
+}
+
+class GetBookmarkGenresDetails extends BookmarkGenresEvent {}

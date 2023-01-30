@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:movietest/Util/duration.dart';
 import 'package:movietest/details/model/movie_details_model.dart';
-import 'package:movietest/details/resource/database/database.dart';
 import 'package:movietest/details/model/save_data_model.dart';
 import 'package:movietest/details/use_case/save_data.dart';
+
+import '../../database/database.dart';
 
 class SaveDeleteData {
   static onPress(BuildContext context, MovieDetailsModel model,

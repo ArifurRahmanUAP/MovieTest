@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:movietest/details/model/save_data_model.dart';
+import 'package:movietest/home/model/genrsModel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
@@ -59,6 +60,23 @@ class DataBaseHelper {
         genres: maps[i]['genres'],
         duration: maps[i]['duration'],
         image: maps[i]['image'],
+      );
+    });
+
+    return s;
+  }
+
+  Future<List<GenreModel>> fetchGenresNameById() async {
+    if (_db == null) {
+      throw "bd is not initiated, initiate using [init(db)] function";
+    }
+    List<Map<String, dynamic>> maps =
+        await _db.rawQuery('Select * from genres_list;');
+
+    var s = List.generate(maps.length, (i) {
+      return GenreModel(
+        genreId: maps[i]['genre_id'],
+        genreName: maps[i]['genre_name'],
       );
     });
 

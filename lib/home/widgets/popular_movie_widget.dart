@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movietest/database/database.dart';
+import 'package:movietest/home/model/genrsModel.dart';
 import 'package:movietest/home/model/popular_movie_model.dart';
 
 import '../../Util/helper.dart';
@@ -16,6 +18,13 @@ class PopularMovieWidget extends StatefulWidget {
 }
 
 class PopularMovieWidgetState extends State<PopularMovieWidget> {
+  late DataBaseHelper dataBaseHelper = DataBaseHelper();
+  late String genersId;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -84,6 +93,39 @@ class PopularMovieWidgetState extends State<PopularMovieWidget> {
                               ),
                               const SizedBox(
                                 height: 10,
+                              ),
+                              SizedBox(
+                                height: 30,
+                                width: Helper.getScreenWidth(context) * .55,
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: widget
+                                        .model.results![index].genreIds
+                                        .toString()
+                                        .split(",")
+                                        .length,
+                                    itemBuilder: (context, index) {
+                                      genersId = widget
+                                          .model.results![0].genreIds![index]
+                                          .toString()
+                                          .split(",")[0];
+
+                                      return Row(
+                                        children: [
+                                          OutlinedButton(
+                                              onPressed: () {},
+                                              child: Text(
+                                                genersId,
+                                                style: const TextStyle(
+                                                    color: Colors.black),
+                                              )),
+                                          const SizedBox(
+                                            width: 3,
+                                          )
+                                        ],
+                                      );
+                                    }),
                               ),
                               const SizedBox(
                                 height: 10,

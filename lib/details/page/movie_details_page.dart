@@ -4,7 +4,6 @@ import 'package:movietest/details/bloc/movie_details_state.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 import '../bloc/movie_details_Bloc.dart';
 import '../bloc/movie_details_event.dart';
-import '../resource/database/database.dart';
 import '../widgets/movie_details_widget.dart';
 
 class MovieDetails extends StatefulWidget {
@@ -18,20 +17,14 @@ class MovieDetails extends StatefulWidget {
 class _MovieState extends State<MovieDetails> {
   late bool isSaved;
   late MovieDetailsBloc _movieDetailsBloc;
-  late DataBaseHelper dataBaseHelper = DataBaseHelper();
 
-  Future isSavedMovie() async {
-    await dataBaseHelper.init();
-    isSaved = await dataBaseHelper.fetchIsBookmarked(widget.movieId);
-  }
+
 
   @override
   void initState() {
-    isSavedMovie();
     isSaved = false;
     _movieDetailsBloc = MovieDetailsBloc(widget.movieId);
     _movieDetailsBloc.add(GetMovieDetails());
-    dataBaseHelper.init();
     super.initState();
   }
 
@@ -63,7 +56,7 @@ class _MovieState extends State<MovieDetails> {
               return _buildLoading();
             } else if (state is MovieDetailsLoaded) {
               return Scaffold(
-                body: MovieDetailsWidget(state.movieDetailsModel, isSaved, dataBaseHelper),
+                body: MovieDetailsWidget(state.movieDetailsModel, widget.movieId),
               );
             } else if (state is HomeError) {
               return Container();

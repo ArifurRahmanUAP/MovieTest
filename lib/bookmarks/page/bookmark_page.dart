@@ -7,7 +7,7 @@ import 'package:movietest/details/model/save_data_model.dart';
 import 'package:movietest/home/page/home_page.dart';
 import '../../Util/helper.dart';
 import '../../Util/util.dart';
-import '../../details/resource/database/database.dart';
+import '../../database/database.dart';
 import '../use_case/bookMark_onClick.dart';
 import '../use_case/bookmark_delete_click.dart';
 
@@ -19,14 +19,14 @@ class BookmarkPage extends StatefulWidget {
 }
 
 class BookmarkPageState extends State<BookmarkPage> {
-  late BookmarkBloc _bookmarkBloc;
+  late BookmarkFetchBloc _bookmarkBloc;
   DataBaseHelper dataBaseHelper = DataBaseHelper();
   late var split;
 
   @override
   void initState() {
     split = [];
-    _bookmarkBloc = BookmarkBloc(dataBaseHelper);
+    _bookmarkBloc = BookmarkFetchBloc(dataBaseHelper);
     _bookmarkBloc.add(GetBookmarkDetails());
     super.initState();
   }
@@ -63,7 +63,7 @@ class BookmarkPageState extends State<BookmarkPage> {
       margin: const EdgeInsets.all(8.0),
       child: BlocProvider(
         create: (_) => _bookmarkBloc,
-        child: BlocListener<BookmarkBloc, BookmarkState>(
+        child: BlocListener<BookmarkFetchBloc, BookmarkState>(
           listener: (context, state) {
             if (state is BookmarkError) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -73,7 +73,7 @@ class BookmarkPageState extends State<BookmarkPage> {
               );
             }
           },
-          child: BlocBuilder<BookmarkBloc, BookmarkState>(
+          child: BlocBuilder<BookmarkFetchBloc, BookmarkState>(
             builder: (context, state) {
               if (state is BookmarkInitial) {
                 return _buildLoading();

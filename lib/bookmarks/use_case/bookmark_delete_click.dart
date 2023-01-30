@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movietest/details/resource/database/database.dart';
+import '../../database/database.dart';
 
 class BookmarkDeleteClick {
   static onPress(

@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import '../../Util/duration.dart';
 import '../../Util/helper.dart';
 import '../../Util/util.dart';
+import '../../database/database.dart';
 import '../model/movie_details_model.dart';
-import '../resource/database/database.dart';
 import '../use_case/add_remove_bookmark.dart';
 
 class MovieDetailsWidget extends StatefulWidget {
   MovieDetailsModel model;
-  bool isSaved;
-  DataBaseHelper dataBaseHelper;
+  int? movieId;
 
-  MovieDetailsWidget(this.model, this.isSaved, this.dataBaseHelper,
-      {super.key});
+  MovieDetailsWidget(this.model, this.movieId, {super.key});
 
   @override
   State<StatefulWidget> createState() => MovieDetailsWidgetState();
@@ -22,10 +20,19 @@ class MovieDetailsWidget extends StatefulWidget {
 
 class MovieDetailsWidgetState extends State<MovieDetailsWidget> {
   StringBuffer saveDatas = StringBuffer();
+  late DataBaseHelper dataBaseHelper = DataBaseHelper();
+  late bool isSaved;
+
+  Future isSavedMovie() async {
+    await dataBaseHelper.init();
+    isSaved = await dataBaseHelper.fetchIsBookmarked(widget.movieId);
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
+    dataBaseHelper.init();
+    isSaved = false;
+    isSavedMovie();
     super.initState();
   }
 
@@ -133,15 +140,14 @@ class MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                                   SaveDeleteData.onPress(
                                                       context,
                                                       widget.model,
-                                                      widget.dataBaseHelper,
-                                                      widget.isSaved,
+                                                      dataBaseHelper,
+                                                      isSaved,
                                                       saveDatas);
-                                                  widget.isSaved =
-                                                      !widget.isSaved;
+                                                  isSaved = !isSaved;
 
                                                   setState(() {});
                                                 },
-                                                child: widget.isSaved
+                                                child: isSaved
                                                     ? const Icon(Icons.bookmark)
                                                     : const Icon(
                                                         Icons.bookmark_border))
