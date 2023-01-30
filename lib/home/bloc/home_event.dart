@@ -7,7 +7,10 @@ abstract class HomeEvent extends Equatable{
   List<Object> get props =>[];
 }
 
-class GetNowShowingMovieList extends HomeEvent {}
+class GetNowShowingMovieList extends HomeEvent {
+int pageNumber;
+  GetNowShowingMovieList(this.pageNumber);
+}
 
 
 

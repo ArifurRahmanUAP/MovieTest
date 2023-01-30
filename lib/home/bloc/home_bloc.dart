@@ -10,8 +10,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GetNowShowingMovieList>((event, emit) async {
       try {
         emit(HomeLoading());
-        final mList = await _apiRepository.fetchNowShowingMovieList();
-
+        final mList = await _apiRepository.fetchNowShowingMovieList(event.pageNumber);
         emit(NowPlayingLoaded(mList));
         if (mList.error != null) {
           emit(HomeError(mList.error));

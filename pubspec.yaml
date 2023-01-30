@@ -42,6 +42,7 @@ dependencies:
   sqflite: ^2.2.0+3
   path_provider: ^2.0.11
   json_annotation: ^3.0.1
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
@@ -63,9 +64,9 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  uses-material-design: true
   assets:
     - assets/
     - assets/movielist.db

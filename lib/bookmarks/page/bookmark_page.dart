@@ -6,6 +6,7 @@ import 'package:movietest/bookmarks/bloc/movie_details_state.dart';
 import 'package:movietest/details/model/save_data_model.dart';
 import 'package:movietest/home/page/home_page.dart';
 import '../../Util/helper.dart';
+import '../../Util/util.dart';
 import '../../details/resource/database/database.dart';
 import '../use_case/bookMark_onClick.dart';
 import '../use_case/bookmark_delete_click.dart';
@@ -121,7 +122,7 @@ class BookmarkPageState extends State<BookmarkPage> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                               child: Image.network(
-                                "https://image.tmdb.org/t/p/w500${model[index].image}",
+                                "${Utill.imageUrl}${model[index].image}",
                                 height: 140,
                                 width: 100,
                               ),

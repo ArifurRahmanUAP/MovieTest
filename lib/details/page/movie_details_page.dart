@@ -6,6 +6,7 @@ import 'package:movietest/details/model/movie_details_model.dart';
 import 'package:movietest/details/use_case/add_remove_bookmark.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 import '../../Util/helper.dart';
+import '../../Util/util.dart';
 import '../bloc/movie_details_Bloc.dart';
 import '../bloc/movie_details_event.dart';
 import '../resource/database/database.dart';
@@ -95,7 +96,7 @@ class _MovieState extends State<MovieDetails> {
                         height: Helper.getScreenHeight(context) * 0.5,
                         width: Helper.getScreenWidth(context),
                         child: Image.network(
-                          "https://image.tmdb.org/t/p/w500${model.posterPath}",
+                          Utill.imageUrl + model.posterPath!,
                           fit: BoxFit.cover,
                         ),
                       ),

@@ -26,7 +26,6 @@ class DataBaseHelper {
       // Write and flush the bytes written
       await io.File(dbPath).writeAsBytes(bytes, flush: true);
     }
-
     _db = await openDatabase(dbPath);
   }
 
@@ -39,7 +38,6 @@ class DataBaseHelper {
   }
 
   Future<bool> fetchIsBookmarked(int? id) async {
-    print(id);
     var list = await _db.rawQuery("Select * from movielist where movieId=$id");
     if (list.isEmpty) {
       return false;

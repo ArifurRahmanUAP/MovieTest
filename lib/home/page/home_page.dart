@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movietest/Util/helper.dart';
+import 'package:movietest/Util/util.dart';
 import 'package:movietest/app_drawer/app_drawer.dart';
 import 'package:movietest/home/bloc/home_bloc.dart';
 import 'package:movietest/home/bloc/home_event.dart';
@@ -17,13 +18,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomeState extends State<HomePage> {
-  final HomeBloc _homeBloc = HomeBloc();
+  int _pageNumber = 1;
+  late final HomeBloc _homeBloc = HomeBloc();
   final Home1Bloc _home1Bloc = Home1Bloc();
 
   @override
   void initState() {
-    _homeBloc.add(GetNowShowingMovieList());
-    _homeBloc.add(GetNowShowingMovieList());
+    _homeBloc.add(GetNowShowingMovieList(_pageNumber));
     _home1Bloc.add(GetPopularMovieList());
     super.initState();
   }
@@ -43,7 +44,10 @@ class _HomeState extends State<HomePage> {
         shadowColor: Colors.white,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.menu_open_sharp,color: Colors.black,),
+            icon: const Icon(
+              Icons.menu_open_sharp,
+              color: Colors.black,
+            ),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -209,10 +213,12 @@ class _HomeState extends State<HomePage> {
                   height: 200,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.network(
-                      "https://image.tmdb.org/t/p/w500${model.results![index].posterPath}",
-                      fit: BoxFit.cover,
-                      width: 180,
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/loading.gif',
+                      image:
+                          "${Utill.imageUrl}${model.results![index].posterPath}",
+                      width: 140,
+                      height: 160,
                     ),
                   ),
                 ),
@@ -264,8 +270,10 @@ class _HomeState extends State<HomePage> {
                         ClipRRect(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10)),
-                          child: Image.network(
-                            "https://image.tmdb.org/t/p/w500${model.results![index].posterPath}",
+                          child: FadeInImage.assetNetwork(
+                            placeholder: 'assets/loading.gif',
+                            image:
+                                "${Utill.imageUrl}${model.results![index].posterPath}",
                             height: 135,
                             width: 100,
                           ),
@@ -279,7 +287,7 @@ class _HomeState extends State<HomePage> {
                               Row(
                                 children: [
                                   SizedBox(
-                                    width: Helper.getScreenWidth(context)*.55,
+                                    width: Helper.getScreenWidth(context) * .55,
                                     child: Text(
                                       model.results![index].originalTitle
                                           .toString(),
