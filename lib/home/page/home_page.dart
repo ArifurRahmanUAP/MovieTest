@@ -8,7 +8,9 @@ import 'package:movietest/home/bloc/home_event.dart';
 import 'package:movietest/home/bloc/home_state.dart';
 import 'package:movietest/home/model/nowPlayingModel.dart';
 import 'package:movietest/home/model/popular_movie_model.dart';
+import 'package:movietest/home/widgets/now_playing_widget.dart';
 import '../use_case/movie_onClick.dart';
+import '../widgets/popular_movie_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -125,8 +127,7 @@ class _HomeState extends State<HomePage> {
                                       )),
                                   SizedBox(
                                     height: 300,
-                                    child: _buildNowPlaying(
-                                        context, state.nowPlayingModel),
+                                    child: NowPlayingWidget(state.nowPlayingModel)
                                   ),
                                   const Align(
                                       alignment: Alignment.topLeft,
@@ -173,8 +174,7 @@ class _HomeState extends State<HomePage> {
                         return Padding(
                           padding: const EdgeInsets.all(5),
                           child: SizedBox(
-                            child:
-                                _buildPopular(context, state.popularMovieModel),
+                            child: PopularMovieWidget(state.popularMovieModel)
                           ),
                         );
                       } else if (state is Home1Error) {
@@ -189,158 +189,6 @@ class _HomeState extends State<HomePage> {
             ),
           ],
         ));
-  }
-
-  Widget _buildNowPlaying(BuildContext context, NowPlayingModel model) {
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: model.results!.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            // MovieClick.onTap(model.results![index].id);
-            MovieClick.onPress(context, model.results![index].id);
-          },
-          child: Container(
-            width: 180,
-            margin: const EdgeInsets.all(2.0),
-            padding: const EdgeInsets.all(5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 200,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/loading.gif',
-                      image:
-                          "${Utill.imageUrl}${model.results![index].posterPath}",
-                      width: 140,
-                      height: 160,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                Text(
-                  model.results![index].originalTitle.toString(),
-                  softWrap: true,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                    ),
-                    Text("${model.results![index].voteAverage} /10")
-                  ],
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildPopular(BuildContext context, PopularMovieModel model) {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      child: SafeArea(
-        child: ListView.builder(
-            itemCount: model.results!.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  MovieClick.onPress(context, model.results![index].id);
-                },
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(60))),
-                  elevation: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          child: FadeInImage.assetNetwork(
-                            placeholder: 'assets/loading.gif',
-                            image:
-                                "${Utill.imageUrl}${model.results![index].posterPath}",
-                            height: 135,
-                            width: 100,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 5),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: Helper.getScreenWidth(context) * .55,
-                                    child: Text(
-                                      model.results![index].originalTitle
-                                          .toString(),
-                                      softWrap: true,
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                  ),
-                                  Text(
-                                      "${model.results![index].voteAverage}/10 IMDb"),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.timer_outlined,
-                                    color: Colors.black,
-                                  ),
-                                  Text(model.results![index].toString())
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }),
-      ),
-    );
   }
 
   Widget _buildLoading() => const Center(child: CircularProgressIndicator());

@@ -121,8 +121,9 @@ class BookmarkPageState extends State<BookmarkPage> {
                             child: ClipRRect(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
-                              child: Image.network(
-                                "${Utill.imageUrl}${model[index].image}",
+                              child: FadeInImage.assetNetwork(
+                                placeholder: 'assets/loading.gif',
+                                image: "${Utill.imageUrl}${model[index].image}",
                                 height: 140,
                                 width: 100,
                               ),

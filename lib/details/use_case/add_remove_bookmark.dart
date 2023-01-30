@@ -26,13 +26,7 @@ class SaveDeleteData {
               .toString(),
           rating: model
               .voteAverage!.toStringAsFixed(2).toString(),
-          genres: saveDatas
-              .toString()
-              .substring(
-              0,
-              saveDatas
-                  .length -
-                  1),
+          genres: saveDatas .toString() .substring( 0, saveDatas .length - 1),
           duration:
           DurationCalculate.durationToString(
               model
